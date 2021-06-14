@@ -8,7 +8,10 @@ package minesweepertej4m;
 import javax.swing.JFrame;
 
 public class gameScreenFrame extends JFrame {
-     private gameScreenPanel theGameScreenPanel;
+    private final int WIDTH = 1920;
+    private final int HEIGHT = 1080;
+    
+    private gameScreenPanel theGameScreenPanel;
     
     /**
      * Constructor
@@ -21,14 +24,19 @@ public class gameScreenFrame extends JFrame {
      * Set up the JFrame
      */
     private void initFrame() {
-        setTitle("Multiplayer MineSweeper");
-        setSize(1920, 1080);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
         theGameScreenPanel = new gameScreenPanel(this); //creates a new blank game
+        setTitle("Multiplayer MineSweeper");
+        setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         add(theGameScreenPanel); //adds it to the JFrame
-        setLocationRelativeTo(null);
-        setResizable(false);
         setVisible(true);
     }
-
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        //Open the main menu
+        gameScreenFrame g = new gameScreenFrame();
+        
+    }
 }
