@@ -8,6 +8,7 @@ package minesweepertej4m;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -19,6 +20,8 @@ import static resources.ResourcesRef.*;
 public class gameScreenPanel extends JPanel implements ActionListener, MouseMotionListener {
     //the parent frame
     private gameScreenFrame gameScreenFrameRef;
+    private static int[][] buttons;
+    private static boolean firstFrame = true;
     
     /**
      * constructor for this panel to be drawn
@@ -26,19 +29,21 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     public gameScreenPanel(gameScreenFrame m) {
         //stores the parent frame passed in
         gameScreenFrameRef = m;
+        
         addMouseMotionListener(this);
+        
         //allows the board to recieve input from mouseclicks
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                System.out.println(e.getX() + ":" + e.getY());
             }
             @Override
             public void mouseReleased(MouseEvent e) {
-                System.out.println(e.getX() + ":" + e.getY());
+                checkButtonHits(e.getX(),e.getY());
             }
 
         });
+        
     }
     
     
@@ -56,16 +61,62 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         g2d.fillRect(0,getHeight()-100,getWidth(),100);
         
         //draws all the images for buttons to be used
-        g2d.drawImage(NAV_SETTINGS, 0, getHeight()-90, this);
-        g2d.drawImage(NAV_SCOUT, (getWidth()/2)-(NAV_SCOUT.getWidth(this)/2)-100, getHeight()-90, this);
-        g2d.drawImage(NAV_FLAG, (getWidth()/2)-(NAV_FLAG.getWidth(this)/2), getHeight()-90, this);
-        g2d.drawImage(NAV_PLACE, (getWidth()/2)-(NAV_PLACE.getWidth(this)/2)+100, getHeight()-90, this);
-        g2d.drawImage(NAV_QUIT, getWidth()-320, getHeight()-90, this);
+        
+        Image[] imagesToDraw = {NAV_SETTINGS, NAV_SCOUT, NAV_FLAG, NAV_PLACE, NAV_QUIT};
+        for(int i = 0; i < buttons.length; ++i){
+            g2d.drawImage(imagesToDraw[i], buttons[i][0], buttons[i][1], this);
+        }
     }
+    
+    
+    
+    private void checkButtonHits(int x, int y){
+        int buttonHit = -1;
+        for(int i = 0; i < buttons.length; ++i){
+            if(x > buttons[i][0] && x < buttons[i][0] + buttons[i][2]
+                && y > buttons[i][1] && y < buttons[i][1] + buttons[i][3]){
+                buttonHit = i;
+                break;
+            }
+        }
+
+        switch(buttonHit){
+            case 0:
+                System.out.println("Settings");
+                break;
+            case 1:
+                System.out.println("Scout Bomb");
+                break;
+            case 2:
+                System.out.println("Flag Bomb");
+                break;
+            case 3:
+                System.out.println("Place Bomb");
+                break;
+            case 4:
+                System.exit(0);
+
+        }
+                
+            //switch to complete different functions
+        
+    }
+    
+    
+    
     
     @Override
     public void paintComponent(Graphics g){
-        
+        if(firstFrame){
+            buttons = new int[][]{
+                {0, getHeight()-90, 467, 85}, //Settings
+                {(getWidth()/2)-(NAV_SCOUT.getWidth(this)/2)-100, getHeight()-90, 80, 80}, //Scout
+                {(getWidth()/2)-(NAV_FLAG.getWidth(this)/2), getHeight()-90, 57, 80}, //Flag
+                {(getWidth()/2)-(NAV_PLACE.getWidth(this)/2)+100, getHeight()-90, 80, 80}, //Place
+                {getWidth()-320, getHeight()-90, 296, 80} //Quit
+            };
+            firstFrame = false;
+        }
         super.paintComponent(g); //prep the panel for drawing
         drawStaticComponents(g); //draw the main menu
     }
@@ -74,14 +125,12 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     public void actionPerformed(ActionEvent e) {
         repaint();
     }
-    
-    
-    
+
     public void mouseMoved(MouseEvent e) {
-        System.out.println(e.getX() + ":" + e.getY());
+//        System.out.println(e.getX() + ":" + e.getY());
     }
 
     public void mouseDragged(MouseEvent e) {
-        System.out.println(e.getX() + ":" + e.getY());
+//        System.out.println(e.getX() + ":" + e.getY());
     }
 }
