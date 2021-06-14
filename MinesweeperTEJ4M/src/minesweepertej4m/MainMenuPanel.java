@@ -5,8 +5,11 @@
  */
 package minesweepertej4m;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -19,75 +22,86 @@ import static resources.ResourcesRef.*;
  *
  * @author Tacitor
  */
-public class MainMenuPanel extends JPanel  implements ActionListener, MouseMotionListener{
+public class MainMenuPanel extends JPanel implements ActionListener, MouseMotionListener {
 
     private MainMenuFrame mainMenuFrameRef;
+    private int drawButtonSelection; //the button that should be drawn with a selection overlay
 
-    
     /**
      * Constructor
-     * @param m 
+     *
+     * @param m
      */
     public MainMenuPanel(MainMenuFrame m) {
         mainMenuFrameRef = m;
 
-        //add a mouse Listener
+        //add a mouse motion listener for hovering over button
+        addMouseMotionListener(this);
+
+        //add a mouse Listener for clicks
         addMouseListener(new MouseInputAdapter() {
             /**
              * Trigger when the user clicks the Main menu Panel.
              *
              * @param evt The event representing the mouse click
-            */ 
+             */
             @Override
             public final void mouseReleased(MouseEvent evt) {
                 //send the mouse event to the click handeler
-                mouseClick(evt);
-            }
-            
-            @Override
-            public final void mouseMoved(MouseEvent evt) {
-                //send the mouse event to the click handeler
-                mouseMovement(evt);
+                buttonMouseEvt(evt, 0); //tpye 0 for a click
             }
         });
 
-    }
-    
-    public void mouseMovement(MouseEvent event) {
-        System.out.println("Moved!");
-        
     }
 
     /**
      * Method to handle when the user clicks on the main menu
      *
      * @param event
+     * @param eventType whether or not the button is hovered over or clicked
      */
-    public void mouseClick(MouseEvent event) {
-        System.out.println("Clicked!");
+    public void buttonMouseEvt(MouseEvent event, int eventType) {
+        
+        //deselect any button
+        drawButtonSelection = -1;
 
-        //check if any of the buttons were clicked
-        //button x and y vars
-        int btnX = super.getWidth() / 2 - MAIN_MENU_CREATE.getWidth(null) / 2;
-        int btnY;
+        //check the buttons if the mouse even is click or move
+        if (eventType == 1 || eventType == 0) {
 
-        //loop through the 3 buttons
-        for (int i = 0; i < 3; i++) {
+            //check if any of the buttons were clicked
+            //button x and y vars
+            int btnX = super.getWidth() / 2 - MAIN_MENU_CREATE.getWidth(null) / 2;
+            int btnY;
 
-            btnY = super.getHeight() / 2 + (MAIN_MENU_CREATE.getHeight(null) * i) + (10 * i);
+            //loop through the 3 buttons
+            for (int i = 0; i < 3; i++) {
 
-            //check if the click was within any of the button hitboxes
-            if (event.getX() > btnX
-                    && event.getY() > btnY
-                    && event.getX() < (btnX + MAIN_MENU_CREATE.getWidth(null))
-                    && event.getY() < (btnY + MAIN_MENU_CREATE.getHeight(null))) {
+                btnY = super.getHeight() / 2 + (MAIN_MENU_CREATE.getHeight(null) * i) + (10 * i);
 
-                System.out.println("Click! On button: " + i);
+                //check if the click was within any of the button hitboxes
+                if (event.getX() > btnX
+                        && event.getY() > btnY
+                        && event.getX() < (btnX + MAIN_MENU_CREATE.getWidth(null))
+                        && event.getY() < (btnY + MAIN_MENU_CREATE.getHeight(null))) {
+
+                    //if a click output that
+                    if (eventType == 1) {
+                        drawButtonSelection = i;
+                       
+                    //check the mouse position
+                    } if (eventType == 0) { 
+                        System.out.println("Click! On button: " + i);
+                        
+                        //also select that button
+                        drawButtonSelection = i;
+                    }
+
+                }
 
             }
-
         }
-
+        
+        repaint();
     }
 
     private void drawMenu(Graphics g) {
@@ -112,6 +126,15 @@ public class MainMenuPanel extends JPanel  implements ActionListener, MouseMotio
         g2d.drawImage(MAIN_MENU_SETTINGS,
                 super.getWidth() / 2 - (MAIN_MENU_CREATE.getWidth(null) / 2),
                 super.getHeight() / 2 + (MAIN_MENU_CREATE.getHeight(null) * 2) + (10 * 2), null);
+        
+        //draw the selection overlay on the button
+        if (drawButtonSelection != -1) {
+            g2d.setColor(new Color(0, 0, 0, 128));
+            g2d.fillRect(super.getWidth() / 2 - (MAIN_MENU_CREATE.getWidth(null) / 2),
+                super.getHeight() / 2 + (MAIN_MENU_CREATE.getHeight(null) * drawButtonSelection) + (10 * drawButtonSelection),
+                MAIN_MENU_CREATE.getWidth(null),
+                MAIN_MENU_CREATE.getHeight(null));
+        }
     }
 
     @Override
@@ -128,12 +151,12 @@ public class MainMenuPanel extends JPanel  implements ActionListener, MouseMotio
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        System.out.println("Dragged");
+        //System.out.println("Dragged");
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        System.out.println("Moved");
+        buttonMouseEvt(e, 1); //type 1 for mouse moved
     }
 
 }
