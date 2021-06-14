@@ -27,12 +27,12 @@ public class MainMenuFrame extends JFrame {
      */
     private void initFrame() {
         setTitle("Multiplayer MineSweeper");
-        setSize(1920, 1080);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         theMainMenuPanel = new MainMenuPanel(this); //creates a new blank game
         add(theMainMenuPanel); //adds it to the JFrame
         setLocationRelativeTo(null);
-        setResizable(false);
+        setResizable(true);
         setVisible(true);
     }
     

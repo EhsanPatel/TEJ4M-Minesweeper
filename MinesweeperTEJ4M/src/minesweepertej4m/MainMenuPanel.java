@@ -8,6 +8,7 @@ package minesweepertej4m;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
+import static resources.ResourcesRef.*;
 
 /**
  *
@@ -29,8 +30,8 @@ public class MainMenuPanel extends JPanel{
         
         Graphics2D g2d = (Graphics2D) g;
         
-        g2d.drawString("Java 2D", 50, 50);
-        g2d.drawOval(0, 0, 100, 100);
+        //add the background image
+        g2d.drawImage(MAIN_MENU_BACKGROUND, 0, 0, this);
     }
     
     @Override

@@ -5,10 +5,15 @@
  */
 package resources;
 
+import java.awt.Image;
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author Tacitor
  */
 public class ResourcesRef {
+    
+    public final static Image MAIN_MENU_BACKGROUND = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/background.png")).getImage();
     
 }
