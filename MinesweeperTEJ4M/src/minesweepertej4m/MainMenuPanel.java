@@ -34,9 +34,20 @@ public class MainMenuPanel extends JPanel{
         g2d.drawImage(MAIN_MENU_BACKGROUND, 0, 0, null);
         
         //add the button images
+        //add the create button
         g2d.drawImage(MAIN_MENU_CREATE, 
-                super.getWidth() / 2 - (MAIN_MENU_CREATE.getWidth(this) / 2), 
+                super.getWidth() / 2 - (MAIN_MENU_CREATE.getWidth(null) / 2), 
                 super.getHeight()/ 2, null);
+        
+        //add the join button
+        g2d.drawImage(MAIN_MENU_JOIN, 
+                super.getWidth() / 2 - (MAIN_MENU_CREATE.getWidth(null) / 2), 
+                super.getHeight()/ 2 + (MAIN_MENU_CREATE.getHeight(null)) + 10, null);
+        
+        //add the settings button
+        g2d.drawImage(MAIN_MENU_JOIN, 
+                super.getWidth() / 2 - (MAIN_MENU_CREATE.getWidth(null) / 2), 
+                super.getHeight()/ 2 + (MAIN_MENU_CREATE.getHeight(null) * 2) + (10 * 2), null);
     }
     
     @Override
