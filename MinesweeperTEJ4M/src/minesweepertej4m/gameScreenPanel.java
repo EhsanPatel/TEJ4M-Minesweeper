@@ -8,13 +8,11 @@ package minesweepertej4m;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import javax.swing.JPanel;
 import static resources.ResourcesRef.*;
 
 public class gameScreenPanel extends JPanel{
     private gameScreenFrame gameScreenFrameRef;
-    private Image settings;
     
     public gameScreenPanel(gameScreenFrame m) {
         gameScreenFrameRef = m;
@@ -30,6 +28,10 @@ public class gameScreenPanel extends JPanel{
         g2d.setColor(new Color(255,255,255));
         g2d.fillRect(0,getHeight()-100,getWidth(),100);
         g2d.drawImage(NAV_SETTINGS, 0, getHeight()-90, this);
+        g2d.drawImage(NAV_SCOUT, (getWidth()/2)-(NAV_SCOUT.getWidth(this)/2)-100, getHeight()-90, this);
+        g2d.drawImage(NAV_FLAG, (getWidth()/2)-(NAV_FLAG.getWidth(this)/2), getHeight()-90, this);
+        g2d.drawImage(NAV_PLACE, (getWidth()/2)-(NAV_PLACE.getWidth(this)/2)+100, getHeight()-90, this);
+        g2d.drawImage(NAV_QUIT, getWidth()-320, getHeight()-90, this);
     }
     
     @Override
