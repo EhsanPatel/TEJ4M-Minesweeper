@@ -31,7 +31,12 @@ public class MainMenuPanel extends JPanel{
         Graphics2D g2d = (Graphics2D) g;
         
         //add the background image
-        g2d.drawImage(MAIN_MENU_BACKGROUND, 0, 0, this);
+        g2d.drawImage(MAIN_MENU_BACKGROUND, 0, 0, null);
+        
+        //add the button images
+        g2d.drawImage(MAIN_MENU_CREATE, 
+                super.getWidth() / 2 - (MAIN_MENU_CREATE.getWidth(this) / 2), 
+                super.getHeight()/ 2, null);
     }
     
     @Override
