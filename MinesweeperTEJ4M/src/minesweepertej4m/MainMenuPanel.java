@@ -5,11 +5,8 @@
  */
 package minesweepertej4m;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -129,11 +126,9 @@ public class MainMenuPanel extends JPanel implements ActionListener, MouseMotion
         
         //draw the selection overlay on the button
         if (drawButtonSelection != -1) {
-            g2d.setColor(new Color(0, 0, 0, 128));
-            g2d.fillRect(super.getWidth() / 2 - (MAIN_MENU_CREATE.getWidth(null) / 2),
-                super.getHeight() / 2 + (MAIN_MENU_CREATE.getHeight(null) * drawButtonSelection) + (10 * drawButtonSelection),
-                MAIN_MENU_CREATE.getWidth(null),
-                MAIN_MENU_CREATE.getHeight(null));
+            g2d.drawImage(MAIN_MENU_SELECTED,
+                super.getWidth() / 2 - (MAIN_MENU_CREATE.getWidth(null) / 2),
+                super.getHeight() / 2 + (MAIN_MENU_CREATE.getHeight(null) * drawButtonSelection) + (10 * drawButtonSelection), null);
         }
     }
 
