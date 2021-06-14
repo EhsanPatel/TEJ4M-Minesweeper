@@ -8,10 +8,15 @@ package minesweepertej4m;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import javax.swing.JPanel;
 import static resources.ResourcesRef.*;
 
-public class gameScreenPanel extends JPanel{
+public class gameScreenPanel extends JPanel implements ActionListener, MouseMotionListener {
     //the parent frame
     private gameScreenFrame gameScreenFrameRef;
     
@@ -21,6 +26,19 @@ public class gameScreenPanel extends JPanel{
     public gameScreenPanel(gameScreenFrame m) {
         //stores the parent frame passed in
         gameScreenFrameRef = m;
+        addMouseMotionListener(this);
+        //allows the board to recieve input from mouseclicks
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                System.out.println(e.getX() + ":" + e.getY());
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                System.out.println(e.getX() + ":" + e.getY());
+            }
+
+        });
     }
     
     
@@ -52,4 +70,18 @@ public class gameScreenPanel extends JPanel{
         drawStaticComponents(g); //draw the main menu
     }
     
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        repaint();
+    }
+    
+    
+    
+    public void mouseMoved(MouseEvent e) {
+        System.out.println(e.getX() + ":" + e.getY());
+    }
+
+    public void mouseDragged(MouseEvent e) {
+        System.out.println(e.getX() + ":" + e.getY());
+    }
 }
