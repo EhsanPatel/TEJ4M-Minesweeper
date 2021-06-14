@@ -7,36 +7,55 @@ package minesweepertej4m;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.MouseAdapter;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import javax.swing.JPanel;
+import javax.swing.event.MouseInputAdapter;
 import static resources.ResourcesRef.*;
 
 /**
  *
  * @author Tacitor
  */
-public class MainMenuPanel extends JPanel {
+public class MainMenuPanel extends JPanel  implements ActionListener, MouseMotionListener{
 
     private MainMenuFrame mainMenuFrameRef;
 
+    
+    /**
+     * Constructor
+     * @param m 
+     */
     public MainMenuPanel(MainMenuFrame m) {
         mainMenuFrameRef = m;
 
         //add a mouse Listener
-        addMouseListener(new MouseAdapter() {
+        addMouseListener(new MouseInputAdapter() {
             /**
              * Trigger when the user clicks the Main menu Panel.
              *
              * @param evt The event representing the mouse click
-             */
+            */ 
             @Override
             public final void mouseReleased(MouseEvent evt) {
                 //send the mouse event to the click handeler
                 mouseClick(evt);
             }
+            
+            @Override
+            public final void mouseMoved(MouseEvent evt) {
+                //send the mouse event to the click handeler
+                mouseMovement(evt);
+            }
         });
 
+    }
+    
+    public void mouseMovement(MouseEvent event) {
+        System.out.println("Moved!");
+        
     }
 
     /**
@@ -45,6 +64,7 @@ public class MainMenuPanel extends JPanel {
      * @param event
      */
     public void mouseClick(MouseEvent event) {
+        System.out.println("Clicked!");
 
         //check if any of the buttons were clicked
         //button x and y vars
@@ -53,7 +73,7 @@ public class MainMenuPanel extends JPanel {
 
         //loop through the 3 buttons
         for (int i = 0; i < 3; i++) {
-            
+
             btnY = super.getHeight() / 2 + (MAIN_MENU_CREATE.getHeight(null) * i) + (10 * i);
 
             //check if the click was within any of the button hitboxes
@@ -99,6 +119,21 @@ public class MainMenuPanel extends JPanel {
 
         super.paintComponent(g); //prep the panel for drawing
         drawMenu(g); //draw the main menu
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        repaint();
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        System.out.println("Dragged");
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        System.out.println("Moved");
     }
 
 }
