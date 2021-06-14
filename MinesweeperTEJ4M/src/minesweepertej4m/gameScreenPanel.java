@@ -9,8 +9,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+import static resources.ResourcesRef.*;
 
 public class gameScreenPanel extends JPanel{
     private gameScreenFrame gameScreenFrameRef;
@@ -29,7 +29,7 @@ public class gameScreenPanel extends JPanel{
         g2d.fillRect(0,0,getWidth(),getHeight());
         g2d.setColor(new Color(255,255,255));
         g2d.fillRect(0,getHeight()-100,getWidth(),100);
-//        g2d.drawImage(NAV_SETTINGS, 0, 0, this);
+        g2d.drawImage(NAV_SETTINGS, 0, getHeight()-90, this);
     }
     
     @Override
