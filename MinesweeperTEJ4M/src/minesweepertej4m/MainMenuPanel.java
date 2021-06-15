@@ -117,13 +117,20 @@ public class MainMenuPanel extends JPanel implements ActionListener, MouseMotion
                         drawButtonBorder = -1;
                         
                         //preform the action that that button is reposible for
-                        if (i == 0) {
+                        if (i == 0) { //create server
                             //hide this main menu
                             mainMenuFrameRef.setVisible(false);
                             
                             //create a new game server creation Frame and show it
                             SweeperCreate creationFrame = new SweeperCreate(mainMenuFrameRef);
                             creationFrame.setVisible(true);
+                        } else if (i == 1) { //join game
+                            //hide this main menu
+                            mainMenuFrameRef.setVisible(false);
+                            
+                            //create a new game server creation Frame and show it
+                            SweeperJoin joinFrame = new SweeperJoin(mainMenuFrameRef);
+                            joinFrame.setVisible(true);
                         }
                     }
 
