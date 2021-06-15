@@ -9,12 +9,14 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 import static resources.ResourcesRef.*;
 
 public class gameScreenPanel extends JPanel implements ActionListener, MouseMotionListener {
@@ -24,7 +26,8 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     //panel variables
     private static int[][] buttons;
     private static boolean firstFrame = true;
-    
+    private Timer timer;
+
     //game variables
     private int turn = 0;
     private int turnCounter = 0;
@@ -51,28 +54,36 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
             @Override
             public void mouseReleased(MouseEvent e) {
                 checkButtonHits(e.getX(),e.getY());
-                if(gridHit(e.getX(),e.getY())){
-                    if(turn == 0){
+                if(turn == 0){
+                    if(firstGridHit(e.getX(),e.getY())){
                         int boardX = (e.getX() - ((getWidth()/2)-550))/50;
                         int boardY = (e.getY() - ((getHeight()/2)-250))/50;
+
+                        boards = getLocalMove(boardX,boardY, 0);
                         
-                        boards = getLocalMove(boardX,boardY);
-                    }
-                    if(turn == 1){
-                        turn = (turn+1)%2;
-                        //to be switched to network move
-//                        boards = getLocalMove(e.getX(),e.getY());
+                    }else if(secondGridHit(e.getX(),e.getY())){
+                        int boardX = (e.getX() - ((getWidth()/2)+50))/50;
+                        int boardY = (e.getY() - ((getHeight()/2)-250))/50;
+
+                        boards = getLocalMove(boardX,boardY, 1);
+                        
                     }
                 }
+                turn = 0;
             }
 
         });
+        
+        //creates a timer to update the window
+        timer = new Timer(25, this);
+        timer.start();
         
     }
     
     private void drawDynamicComponents(Graphics g) {
         //The graphics model to use
         Graphics2D g2d = (Graphics2D) g;
+        displayBoardsGUI(g2d);
         
         //draw boards on screen
     }
@@ -102,41 +113,60 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         }
     }
     
-    private int[][][][] getLocalMove(int boardX, int boardY){
+    private int[][][][] getLocalMove(int boardX, int boardY, int boardNum){
         //board format [whos board][x][y][covered, is bomb, # surrounding, is flagged]
         if(turnCounter == 0){
             //generate the board as the first move always
         }
         if(currentAction.equals("scout")){
-            boards[turn][boardX][boardY][0] = 1;
-            if(boards[turn][boardX][boardY][1] == 1){
-                //game over you clicked on a bomb
-            }
+            boards[boardNum][boardX][boardY][0] = 1;
+//            if(boards[boardNum][boardX][boardY][1] == 1){
+//                game over you clicked on a bomb
+//            }
         }else if(currentAction.equals("flag")){
-            boards[turn][boardX][boardY][3] = 1;
+            boards[boardNum][boardX][boardY][3] = 1;
         }else if(currentAction.equals("bomb")){
-            boards[(turn+1)%2][boardX][boardY][1] = 1;
+            boards[(boardNum+1)%2][boardX][boardY][1] = 1;
         }
         turn = (turn+1)%2;
         
         
-        displayBoards(1);
+        displayBoards(0);
         return boards;
     }
 
     private void displayBoards(int metric){
         String msg = "";
-        
+        //board format [whos board][x][y][covered, is bomb, # surrounding, is flagged]
         for (int i = 0; i < boards.length; i++) {
             msg += "\n\n\n\n";
-            for (int j = 0; j < boards[turn].length; j++) {
+            for (int j = 0; j < boards[i].length; j++) {
                 msg += "\n";
-                for (int k = 0; k < boards[turn][j].length; k++) {
-                    msg += boards[turn][k][j][metric] + " ";
+                for (int k = 0; k < boards[i][j].length; k++) {
+                    msg += boards[i][k][j][metric] + " ";
                 }
             }
         }
         System.out.println(msg);
+    }
+    
+    private void displayBoardsGUI(Graphics2D g2d){
+        //board format [whos board][x][y][covered, is bomb, # surrounding, is flagged]
+        for (int i = 0; i < boards.length; i++) {
+            for (int j = 0; j < boards[i].length; j++) {
+                for (int k = 0; k < boards[i][j].length; k++) {
+                    g2d.setColor(new Color(0,0,0));
+                    g2d.fillRect(((getWidth()/2)-550) + (k*50) + (i*600),(getHeight()/2)-250 + (j*50),50,50);
+
+                    if(boards[i][k][j][0] == 0){
+                        g2d.setColor(new Color(55, 57, 63));
+                    }else{
+                        g2d.setColor(new Color(255, 255, 255));
+                    }
+                    g2d.fillRect(((getWidth()/2)-550) + (k*50) + (i*600)+2,(getHeight()/2)-250 + (j*50)+2,46,46);
+                }
+            }
+        }
     }
     
     /**
@@ -176,26 +206,28 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     }
     
     
-    private boolean gridHit(int x, int y){
+    private boolean firstGridHit(int x, int y){
         return (x > (getWidth()/2)-550 && x < (getWidth()/2)-50) && (y > (getHeight()/2)-250 && y < (getHeight()/2)+250);
-    }    
+    }
+    private boolean secondGridHit(int x, int y){
+        return (x > (getWidth()/2)+50 && x < (getWidth()/2)+550) && (y > (getHeight()/2)-250 && y < (getHeight()/2)+250);
+    }
     
     
     @Override
     public void paintComponent(Graphics g){
-        if(firstFrame){
-            buttons = new int[][]{
-                {0, getHeight()-90, 467, 85}, //Settings
-                {(getWidth()/2)-(NAV_SCOUT.getWidth(this)/2)-150, getHeight()-90, 80, 80}, //Scout
-                {(getWidth()/2)-(NAV_FLAG.getWidth(this)/2)-25, getHeight()-90, 57, 80}, //Flag
-                {(getWidth()/2)-(NAV_PLACE.getWidth(this)/2)+65, getHeight()-90, 80, 80}, //Place
-                {getWidth()-320, getHeight()-90, 296, 80} //Quit
-            };
-            firstFrame = false;
-        }
+        buttons = new int[][]{
+            {0, getHeight()-90, 467, 85}, //Settings
+            {(getWidth()/2)-(NAV_SCOUT.getWidth(this)/2)-150, getHeight()-90, 80, 80}, //Scout
+            {(getWidth()/2)-(NAV_FLAG.getWidth(this)/2)-25, getHeight()-90, 57, 80}, //Flag
+            {(getWidth()/2)-(NAV_PLACE.getWidth(this)/2)+65, getHeight()-90, 80, 80}, //Place
+            {getWidth()-320, getHeight()-90, 296, 80} //Quit
+        };
         super.paintComponent(g);  //prep the panel for drawing
         drawStaticComponents(g);  //draw the main menu
         drawDynamicComponents(g); //draw the changing components
+        //synchronizes the graphics
+        Toolkit.getDefaultToolkit().sync();
     }
     
     @Override
