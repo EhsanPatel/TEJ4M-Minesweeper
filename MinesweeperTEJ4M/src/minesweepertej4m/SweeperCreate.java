@@ -13,6 +13,7 @@ public class SweeperCreate extends javax.swing.JFrame {
 
     MainMenuFrame menuRef;
     Server sweeperServer;
+    Client sweeperClient;
 
     /**
      * Creates new form SweeperCreate
@@ -117,6 +118,13 @@ public class SweeperCreate extends javax.swing.JFrame {
         SweeperServerRunnable sweeperServerRunnable = new SweeperServerRunnable(sweeperServer, menuRef);
         sweeperServerRunnable.setDaemon(true); //allow the JVM to close this thread
         sweeperServerRunnable.start();
+
+        //create a first client to auto join 
+        sweeperClient = new Client(700, 300, "localhost", Integer.parseInt(portTxtFld.getText()));
+        sweeperClient.connectToServer();
+        sweeperClient.setUpGUI();
+        sweeperClient.setUpButton();
+
     }//GEN-LAST:event_createBtnActionPerformed
 
     private class SweeperServerRunnable extends Thread implements Runnable {
