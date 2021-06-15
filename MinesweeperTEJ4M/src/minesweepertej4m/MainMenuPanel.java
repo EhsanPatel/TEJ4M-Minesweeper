@@ -115,6 +115,16 @@ public class MainMenuPanel extends JPanel implements ActionListener, MouseMotion
                         //also select that button
                         drawButtonSelection = i;
                         drawButtonBorder = -1;
+                        
+                        //preform the action that that button is reposible for
+                        if (i == 0) {
+                            //hide this main menu
+                            mainMenuFrameRef.setVisible(false);
+                            
+                            //create a new game server creation Frame and show it
+                            SweeperCreate creationFrame = new SweeperCreate(mainMenuFrameRef);
+                            creationFrame.setVisible(true);
+                        }
                     }
 
                 }
