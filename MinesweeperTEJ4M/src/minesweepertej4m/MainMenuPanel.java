@@ -5,6 +5,7 @@
  */
 package minesweepertej4m;
 
+import java.awt.BasicStroke;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -32,7 +33,7 @@ public class MainMenuPanel extends JPanel implements ActionListener, MouseMotion
      */
     public MainMenuPanel(MainMenuFrame m) {
         mainMenuFrameRef = m;
-
+        
         //setup vars
         drawButtonBorder = -1;
         drawButtonSelection = -1;
@@ -75,7 +76,7 @@ public class MainMenuPanel extends JPanel implements ActionListener, MouseMotion
 
         //check the buttons if the mouse even is click or move
         if (eventType <= 2 || eventType >= 0) {
-
+            
             //if the button is released always clear a button selection
             if (eventType == 0) {
                 drawButtonBorder = -1;
@@ -83,25 +84,25 @@ public class MainMenuPanel extends JPanel implements ActionListener, MouseMotion
 
             //check if any of the buttons were clicked
             //button x and y vars
-            int btnX = super.getWidth() / 2 - MAIN_MENU_REG[0].getWidth(null) / 2;
+            int btnX = super.getWidth() / 2 - MAIN_MENU_CREATE.getWidth(null) / 2;
             int btnY;
 
             //loop through the 3 buttons
             for (int i = 0; i < 3; i++) {
 
-                btnY = super.getHeight() / 2 + (MAIN_MENU_REG[0].getHeight(null) * i) + (10 * i);
+                btnY = super.getHeight() / 2 + (MAIN_MENU_CREATE.getHeight(null) * i) + (10 * i);
 
                 //check if the click was within any of the button hitboxes
                 if (event.getX() > btnX
                         && event.getY() > btnY
-                        && event.getX() < (btnX + MAIN_MENU_REG[0].getWidth(null))
-                        && event.getY() < (btnY + MAIN_MENU_REG[0].getHeight(null))) {
+                        && event.getX() < (btnX + MAIN_MENU_CREATE.getWidth(null))
+                        && event.getY() < (btnY + MAIN_MENU_CREATE.getHeight(null))) {
 
                     //if a mouse movemnt
                     if (eventType == 1) {
                         drawButtonSelection = i;
                     }
-
+                    
                     //chcek if the user made a down click on a button
                     if (eventType == 2) {
                         drawButtonBorder = i;
@@ -131,24 +132,36 @@ public class MainMenuPanel extends JPanel implements ActionListener, MouseMotion
         //add the background image
         g2d.drawImage(MAIN_MENU_BACKGROUND, 0, 0, null);
 
-        //create a new array to store the Image array for a given button
-        java.awt.Image[] buttonImg;
+        //add the button images
+        //add the create button
+        g2d.drawImage(MAIN_MENU_CREATE,
+                super.getWidth() / 2 - (MAIN_MENU_CREATE.getWidth(null) / 2),
+                super.getHeight() / 2, null);
 
-        //loop through the 3 buttons to draw them
-        for (int i = 0; i < 3; i++) {
+        //add the join button
+        g2d.drawImage(MAIN_MENU_JOIN,
+                super.getWidth() / 2 - (MAIN_MENU_CREATE.getWidth(null) / 2),
+                super.getHeight() / 2 + (MAIN_MENU_CREATE.getHeight(null)) + 10, null);
 
-            if (drawButtonBorder == i) {
-                buttonImg = MAIN_MENU_CLICK;
-            } else if (drawButtonSelection == i) {
-                buttonImg = MAIN_MENU_HOVER;
-            } else {
-                buttonImg = MAIN_MENU_REG;
-            }
+        //add the settings button
+        g2d.drawImage(MAIN_MENU_SETTINGS,
+                super.getWidth() / 2 - (MAIN_MENU_CREATE.getWidth(null) / 2),
+                super.getHeight() / 2 + (MAIN_MENU_CREATE.getHeight(null) * 2) + (10 * 2), null);
 
-            g2d.drawImage(buttonImg[i],
-                    super.getWidth() / 2 - (buttonImg[i].getWidth(null) / 2),
-                    super.getHeight() / 2 + (buttonImg[i].getHeight(null) * i) + (10 * i), null);
-
+        //draw the selection overlay on the button
+        if (drawButtonSelection != -1) {
+            g2d.drawImage(MAIN_MENU_SELECTED,
+                    super.getWidth() / 2 - (MAIN_MENU_CREATE.getWidth(null) / 2),
+                    super.getHeight() / 2 + (MAIN_MENU_CREATE.getHeight(null) * drawButtonSelection) + (10 * drawButtonSelection), null);
+        }
+        
+        //draw the boarder overlay on the button
+        if (drawButtonBorder != -1) {
+            g2d.setStroke(new BasicStroke(5));
+            g2d.drawRect(super.getWidth() / 2 - (MAIN_MENU_CREATE.getWidth(null) / 2),
+                    super.getHeight() / 2 + (MAIN_MENU_CREATE.getHeight(null) * drawButtonBorder) + (10 * drawButtonBorder), 
+                    MAIN_MENU_CREATE.getWidth(null),
+                    MAIN_MENU_CREATE.getHeight(null));
         }
     }
 
