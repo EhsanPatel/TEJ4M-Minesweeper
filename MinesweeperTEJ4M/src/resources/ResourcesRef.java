@@ -14,11 +14,24 @@ import javax.swing.ImageIcon;
  */
 public class ResourcesRef {
     //Menu Resources
+    //background
     public final static Image MAIN_MENU_BACKGROUND = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/background.png")).getImage();
-    public final static Image MAIN_MENU_SETTINGS = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/settings.png")).getImage();
-    public final static Image MAIN_MENU_CREATE = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/createGame.png")).getImage();
-    public final static Image MAIN_MENU_JOIN = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/joinGame.png")).getImage();
-    public final static Image MAIN_MENU_SELECTED = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/buttonSelectionOverlay.png")).getImage();
+    //regular buttons
+    private final static Image MAIN_MENU_SETTINGS = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/settings.png")).getImage();
+    private final static Image MAIN_MENU_CREATE = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/createGame.png")).getImage();
+    private final static Image MAIN_MENU_JOIN = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/joinGame.png")).getImage();
+    //hovered buttons
+    private final static Image MAIN_MENU_SETTINGS_HOVER = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/hoverSettings.png")).getImage();
+    private final static Image MAIN_MENU_CREATE_HOVER = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/hoverCreate.png")).getImage();
+    private final static Image MAIN_MENU_JOIN_HOVER = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/hoverJoin.png")).getImage();
+    //bordered buttons
+    private final static Image MAIN_MENU_SETTINGS_BORDER = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/clickSettings.png")).getImage();
+    private final static Image MAIN_MENU_CREATE_BORDER = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/clickCreate.png")).getImage();
+    private final static Image MAIN_MENU_JOIN_BORDER = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/clickJoin.png")).getImage();
+    
+    public final static Image[] MAIN_MENU_REG = new Image[]{MAIN_MENU_CREATE, MAIN_MENU_JOIN, MAIN_MENU_SETTINGS};
+    public final static Image[] MAIN_MENU_HOVER = new Image[]{MAIN_MENU_CREATE_HOVER, MAIN_MENU_JOIN_HOVER, MAIN_MENU_SETTINGS_HOVER};
+    public final static Image[] MAIN_MENU_CLICK = new Image[]{MAIN_MENU_CREATE_BORDER, MAIN_MENU_JOIN_BORDER, MAIN_MENU_SETTINGS_BORDER};
     
     
     //Game screen Resources
