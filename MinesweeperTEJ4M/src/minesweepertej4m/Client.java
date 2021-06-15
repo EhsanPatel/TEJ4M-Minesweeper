@@ -88,7 +88,7 @@ public class Client extends JFrame {
     public void setUpGUI() {
         //get up the GUI
         this.setSize(width, height);
-        this.setTitle("Catan Socket Test - Client #" + clientID);
+        this.setTitle("Socket Test - Client #" + clientID);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         contentPane.setLayout(new GridLayout(1, 5, 10, 10));
         contentPane.add(header);
