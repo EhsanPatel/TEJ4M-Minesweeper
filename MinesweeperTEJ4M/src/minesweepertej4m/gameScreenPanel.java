@@ -53,11 +53,15 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                 checkButtonHits(e.getX(),e.getY());
                 if(gridHit(e.getX(),e.getY())){
                     if(turn == 0){
-                        boards = getLocalMove(e.getX(),e.getY());
+                        int boardX = (e.getX() - ((getWidth()/2)-550))/50;
+                        int boardY = (e.getY() - ((getHeight()/2)-250))/50;
+                        
+                        boards = getLocalMove(boardX,boardY);
                     }
                     if(turn == 1){
+                        turn = (turn+1)%2;
                         //to be switched to network move
-                        boards = getLocalMove(e.getX(),e.getY());
+//                        boards = getLocalMove(e.getX(),e.getY());
                     }
                 }
             }
@@ -87,9 +91,8 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         
         
         //draws the grid background
-        int margin = 50;
-        g2d.fillRect((getWidth()/2)-(500+margin),(getHeight()/2)-250,500,500);
-        g2d.fillRect((getWidth()/2)+margin,(getHeight()/2)-250,500,500);
+        g2d.fillRect((getWidth()/2)-(550),(getHeight()/2)-250,500,500);
+        g2d.fillRect((getWidth()/2)+50,(getHeight()/2)-250,500,500);
         
         //draws all the images for buttons to be used
         
@@ -100,8 +103,6 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     }
     
     private int[][][][] getLocalMove(int boardX, int boardY){
-        boardX = 0;
-        boardY = 0;
         //board format [whos board][x][y][covered, is bomb, # surrounding, is flagged]
         if(turnCounter == 0){
             //generate the board as the first move always
@@ -131,7 +132,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
             for (int j = 0; j < boards[turn].length; j++) {
                 msg += "\n";
                 for (int k = 0; k < boards[turn][j].length; k++) {
-                    msg += boards[turn][j][k][metric] + " ";
+                    msg += boards[turn][k][j][metric] + " ";
                 }
             }
         }
@@ -176,7 +177,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     
     
     private boolean gridHit(int x, int y){
-        return true;
+        return (x > (getWidth()/2)-550 && x < (getWidth()/2)-50) && (y > (getHeight()/2)-250 && y < (getHeight()/2)+250);
     }    
     
     
