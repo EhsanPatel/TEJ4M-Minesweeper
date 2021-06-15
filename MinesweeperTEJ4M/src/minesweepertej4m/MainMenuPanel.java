@@ -110,7 +110,7 @@ public class MainMenuPanel extends JPanel implements ActionListener, MouseMotion
 
                     //check if the user released the mouse button
                     if (eventType == 0) {
-                        System.out.println("Click! On button: " + i);
+                        //System.out.println("Click! On button: " + i);
 
                         //also select that button
                         drawButtonSelection = i;

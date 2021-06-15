@@ -28,25 +28,46 @@ public class Server {
 
     //A starting String
     private String chat = "Hello from server\n";
+    
+    //refernce to the main menu
+    MainMenuFrame mainMenu;
 
     /**
      * The constructor
+     *
+     * @param portNum
+     * @param mainMenu
      */
-    public Server() {
+    public Server(int portNum, MainMenuFrame mainMenu) {
         //no clients have connected yet
         numClients = 0;
         //save the number of clients that will connect
         maxClients = 2;
+        
+        this.mainMenu = mainMenu;
 
         //initialize the array
         clients = new ServerSideConnection[maxClients];
 
         //create the socket to listen 
         try {
-            serverSocket = new ServerSocket(25570);
+            serverSocket = new ServerSocket(portNum);
         } catch (IOException e) {
             System.out.println("[Server] " + "IOException from server contructor");
         }
+    }
+    
+    /**
+     * Count one of the clients disconnecting
+     */
+    public void decrementClientCount() {
+        numClients--;
+        
+        //check if we have hit 0
+        if (numClients == 0) {
+            //exit out
+            mainMenu.setVisible(true);
+        } 
     }
 
     public void acceptConnections() {
@@ -60,13 +81,14 @@ public class Server {
                 numClients++;
                 System.out.println("[Server] " + "Client #" + numClients + " has connected");
                 //create a new SSC for to keep track of that incoming socket
-                ServerSideConnection ssc = new ServerSideConnection(s, numClients);
+                ServerSideConnection ssc = new ServerSideConnection(s, numClients, this);
 
                 //save that new ssc to the list of clients
                 clients[numClients - 1] = ssc;
 
                 //start a new thread just for that one client
                 Thread t = new Thread(ssc);
+                t.setDaemon(true);
                 t.start();
             }
             System.out.println("[Server] " + "We now have " + maxClients + " players. No more connections will be accepted.");
@@ -90,15 +112,18 @@ public class Server {
         private DataOutputStream dataOut;
         private int clientID;
 
+        private Server serverRef; //reference to the server this SSC belongs to
+
         /**
          * Constructor
          *
          * @param socket
          * @param id
          */
-        public ServerSideConnection(Socket socket, int id) {
+        public ServerSideConnection(Socket socket, int id, Server serverRef) {
             this.socket = socket;
             clientID = id;
+            this.serverRef = serverRef;
             //setup the data streams
             try {
                 dataIn = new DataInputStream(socket.getInputStream());
@@ -185,7 +210,6 @@ public class Server {
 
                         //debug the file that was sent
                         //System.out.println("[Server] " + Arrays.toString(fileAsStream));
-
                         //send the new chat out to all the clients
                         for (ServerSideConnection client : clients) {
                             //debug how many times it was sent
@@ -199,6 +223,9 @@ public class Server {
                 }
             } catch (IOException e) {
                 System.out.println("[Server] " + "IOException from SSC run() for ID#" + clientID);
+                
+                //since there was a connection error this client it as good as gone and can be removed
+                decrementClientCount();
             }
         }
 
@@ -251,20 +278,6 @@ public class Server {
             }
         }
 
-    }
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        
-        // TODO code application logic here
-        System.out.println("[Server] " + "Hello World: Server");
-
-        //create the server socket
-        Server server = new Server();
-        //begin listening
-        server.acceptConnections();
     }
 
 }

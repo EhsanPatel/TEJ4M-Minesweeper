@@ -10,11 +10,13 @@ package minesweepertej4m;
  * @author Tacitor
  */
 public class SweeperCreate extends javax.swing.JFrame {
-    
+
     MainMenuFrame menuRef;
+    Server sweeperServer;
 
     /**
      * Creates new form SweeperCreate
+     *
      * @param m
      */
     public SweeperCreate(MainMenuFrame m) {
@@ -38,6 +40,7 @@ public class SweeperCreate extends javax.swing.JFrame {
         createBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Multiplayer MineSweeper");
 
         titleLbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         titleLbl.setText("Create a Minesweeper Game Server");
@@ -56,6 +59,7 @@ public class SweeperCreate extends javax.swing.JFrame {
 
         createBtn.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         createBtn.setText("Create Game");
+        createBtn.setName("Multiplayer Minesweeper"); // NOI18N
         createBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 createBtnActionPerformed(evt);
@@ -104,8 +108,45 @@ public class SweeperCreate extends javax.swing.JFrame {
     }//GEN-LAST:event_portTxtFldActionPerformed
 
     private void createBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createBtnActionPerformed
-        // TODO add your handling code here:
+        // hide this window
+        this.setVisible(false);
+
+        //create the Sweeper Server for two players
+        sweeperServer = new Server(Integer.parseInt(portTxtFld.getText()), menuRef);
+
+        SweeperServerRunnable sweeperServerRunnable = new SweeperServerRunnable(sweeperServer, menuRef);
+        sweeperServerRunnable.setDaemon(true); //allow the JVM to close this thread
+        sweeperServerRunnable.start();
     }//GEN-LAST:event_createBtnActionPerformed
+
+    private class SweeperServerRunnable extends Thread implements Runnable {
+
+        private boolean stopRequested = false;
+        Server server;
+        MainMenuFrame mainMenu;
+
+        public SweeperServerRunnable(Server server, MainMenuFrame mainMenu) {
+            this.server = server;
+            this.mainMenu = mainMenu;
+        }
+
+        public synchronized void requestStop() {
+            stopRequested = true;
+        }
+
+        @Override
+        public void run() {
+
+            //check if this thread should stop
+            while (!stopRequested) {
+                server.acceptConnections();
+
+                //only run once 
+                stopRequested = true;
+            }
+        }
+
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton createBtn;

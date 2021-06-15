@@ -39,7 +39,7 @@ public class MainMenuFrame extends JFrame {
                 }
             }
         } catch (Exception ex) {
-            System.out.println("[Client] " + "Error loading Windows Look and feel");
+            System.out.println("[Main Menu] " + "Error loading Windows Look and feel");
         }
         
         
