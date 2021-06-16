@@ -95,17 +95,27 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         Graphics2D g2d = (Graphics2D) g;
         displayBoardsGUI(g2d);
         
+        
+        g2d.setColor(new Color(0,0,0));
+
         //highlights the current action
         Stroke oldStroke = g2d.getStroke();
         g2d.setStroke(new BasicStroke(4));
         int x = 0;
         int y = 0;
-        
-        if(currentAction.equals("flag")){
-            
+
+        if(currentAction.equals("scout")){
+            x = buttons[1][0];
+            y = buttons[1][1];
+        }else if(currentAction.equals("flag")){
+            x = buttons[2][0]-10;
+            y = buttons[2][1];
+        }else if(currentAction.equals("bomb")){
+            x = buttons[3][0];
+            y = buttons[3][1];
         }
         
-        g2d.drawRect(x,y,85,85);
+        g2d.drawRect(x-2,y-5,85,85);
         g2d.setStroke(oldStroke);
         //draw boards on screen
     }
@@ -252,9 +262,9 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     public void paintComponent(Graphics g){
         buttons = new int[][]{
             {0, getHeight()-90, 467, 85}, //Settings
-            {(getWidth()/2)-(NAV_SCOUT.getWidth(this)/2)-150, getHeight()-90, 80, 80}, //Scout
-            {(getWidth()/2)-(NAV_FLAG.getWidth(this)/2)-25, getHeight()-90, 57, 80}, //Flag
-            {(getWidth()/2)-(NAV_PLACE.getWidth(this)/2)+65, getHeight()-90, 80, 80}, //Place
+            {(getWidth()/2)-(NAV_SCOUT.getWidth(this)/2)-140, getHeight()-90, 80, 80}, //Scout
+            {(getWidth()/2)-(NAV_FLAG.getWidth(this)/2), getHeight()-90, 57, 80}, //Flag
+            {(getWidth()/2)-(NAV_PLACE.getWidth(this)/2)+140, getHeight()-90, 80, 80}, //Place
             {getWidth()-320, getHeight()-90, 296, 80} //Quit
         };
         super.paintComponent(g);  //prep the panel for drawing
