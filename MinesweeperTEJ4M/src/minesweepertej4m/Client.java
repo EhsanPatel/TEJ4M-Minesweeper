@@ -19,6 +19,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -169,6 +170,9 @@ public class Client extends JFrame {
         try {
             //enseure the file can be stored where it needs to
             Files.createDirectories(Paths.get(serializedFileDest));
+            
+            //delete any file that might be there 
+            Files.deleteIfExists(Paths.get(serializedFileDest + File.separator + "serialBoardToSend.txt"));
 
             //save the object in a file
             FileOutputStream file = new FileOutputStream(serializedFileDest + File.separator + "serialBoardToSend.txt");
@@ -176,9 +180,9 @@ public class Client extends JFrame {
 
             //Serialize the array
             out.writeObject(boards);
-            
+
             //send the file to the server
-            sendFilePrep(serializedFileDest + File.separator + "serialBoardToRecieve.txt");
+            sendFilePrep(serializedFileDest + File.separator + "serialBoardToSend.txt", "serialBoardToRecive.txt");
 
             //close the files and streams
             out.close();
@@ -248,7 +252,8 @@ public class Client extends JFrame {
 
                     String filePath = saveFileLoader.getSelectedFile().getPath();
                     
-                    sendFilePrep(filePath);
+                    String fileName = filePath.substring(filePath.lastIndexOf(File.separator) + 1);
+                    sendFilePrep(filePath, fileName);
 
                 }
             }
@@ -263,9 +268,9 @@ public class Client extends JFrame {
      *
      * @param filePath
      */
-    private void sendFilePrep(String filePath) {
+    private void sendFilePrep(String filePath, String fileNameToSend) {
 
-        //test if it is a vailid file
+        //test if it is a valid file
         try {
 
             File file = new File(filePath);
@@ -273,7 +278,7 @@ public class Client extends JFrame {
 
             int fileLength = (int) file.length();
 
-            String fileName = filePath.substring(filePath.lastIndexOf(File.separator) + 1);
+            String fileName = fileNameToSend;
 
             //debug file name and length
             //System.out.println(fileName);
@@ -289,10 +294,8 @@ public class Client extends JFrame {
             messageToSend.setText("");
 
             justPressedSend = true;
-
+            
             fileStream.close();
-            file.setReadOnly();
-            file.setExecutable(true);
 
         } catch (FileNotFoundException exception) {
             JOptionPane.showMessageDialog(null, "There was an error loading the save file:\n" + exception, "Loading Error", JOptionPane.ERROR_MESSAGE);
@@ -355,7 +358,7 @@ public class Client extends JFrame {
                     //write the file
                     try {
                         String saveToPath = System.getProperty("user.home")
-                                + File.separator + "AppData" + File.separator + "Roaming" + File.separator + "SettlerDevs" + File.separator + "NetworkTest"
+                                + File.separator + "AppData" + File.separator + "Roaming" + File.separator + "Multiplayer MineSweeper"
                                 + File.separator + "Client" + clientID;
 
                         //ensure the directory is there
@@ -370,7 +373,7 @@ public class Client extends JFrame {
                         //close it
                         fos.close();
                     } catch (FileNotFoundException exception) {
-                        JOptionPane.showMessageDialog(null, "There was an error loading the save file:\n" + exception, "Loading Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "There was an error saving the serialized board file:\n" + exception, "Loading Error", JOptionPane.ERROR_MESSAGE);
                     } catch (IOException exception) {
                         JOptionPane.showMessageDialog(null, "There was an IOException loading the save file:\n" + exception, "Loading Error", JOptionPane.ERROR_MESSAGE);
                     }   //System.out.println("Chat is : \n" + fileTypeRecieve.getChat());
