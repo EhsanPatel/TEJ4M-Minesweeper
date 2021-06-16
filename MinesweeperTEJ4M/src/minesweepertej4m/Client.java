@@ -15,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -41,7 +42,7 @@ public class Client extends JFrame {
     private String chat;
     private boolean buttonEnabled;
     private boolean justPressedSend = false; //if this client waiting for the first transmision from the server
-    
+
     private String destIp; //the IP of the destination server
     private int portNumber; //the port the server will be listening on
 
@@ -80,7 +81,7 @@ public class Client extends JFrame {
         messageToSend = new JTextArea();
         sendBtn = new JButton();
         fileBtn = new JButton();
-        
+
         destIp = ip;
         portNumber = port;
     }
@@ -145,6 +146,37 @@ public class Client extends JFrame {
         csc = new ClientSideConnection(destIp, portNumber);
     }
 
+    /**
+     * Take a 4D array containing the board data and send it to the server.
+     * @param boards the ungodly 4D boards array
+     */
+    public void sendBoardToServer(int[][][][] boards) {
+        
+        //debug the calling of this method
+        System.out.println("doing the serialization thing");
+        
+        //setup a destination for the serialized boards
+        String serializedFileDest = "boards.ser";
+        
+        //try the serialization
+        try {
+            //save the object in a file
+            FileOutputStream file = new FileOutputStream(serializedFileDest);
+            ObjectOutputStream out = new ObjectOutputStream(file);
+            
+            //Serialize the array
+            out.writeObject(boards);
+            
+            out.close();
+            file.close();
+            
+            System.out.println("Serialization complete");
+            
+        } catch (IOException ex) {
+            System.out.println("[Client #" + clientID + "] IOException in sendBoardToServer()\n" + ex);
+        }
+    }
+
     public void setUpButton() {
         //create action listener for when the button is clicked to send a message
         ActionListener al = (ActionEvent e) -> {
@@ -201,7 +233,7 @@ public class Client extends JFrame {
                         messageToSend.setText("");
 
                         justPressedSend = true;
-                        
+
                         fileStream.close();
                         file.setReadOnly();
                         file.setExecutable(true);
@@ -457,20 +489,17 @@ public class Client extends JFrame {
 
     /**
      * @param args the command line arguments
-     
-    public static void main(String[] args) {
-        // TODO code application logic here
-        
-        //get the ip and port the 
-        String ip = JOptionPane.showInputDialog(null, "Please enter the IP or URL of the game server. (donau.ca for dev server):");
-        int port = Integer.parseInt(JOptionPane.showInputDialog(null, "Please enter the port of the game server. (25570 for dev server):"));
-        
-        System.out.println("[Client] " + "Hello World: Client");
-        Client client = new Client(700, 200, ip, port);
-        client.connectToServer();
-        client.setUpGUI();
-        client.setUpButton();
-    }
-    */
-
+     *
+     * public static void main(String[] args) { // TODO code application logic
+     * here
+     *
+     * //get the ip and port the String ip = JOptionPane.showInputDialog(null,
+     * "Please enter the IP or URL of the game server. (donau.ca for dev
+     * server):"); int port = Integer.parseInt(JOptionPane.showInputDialog(null,
+     * "Please enter the port of the game server. (25570 for dev server):"));
+     *
+     * System.out.println("[Client] " + "Hello World: Client"); Client client =
+     * new Client(700, 200, ip, port); client.connectToServer();
+     * client.setUpGUI(); client.setUpButton(); }
+     */
 }

@@ -69,12 +69,17 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
 
                         boards = getLocalMove(boardX,boardY, 0);
                         
+                        //send the updated board to the game server
+                        sweeperClient.sendBoardToServer(boards);  
+                        
                     }else if(secondGridHit(e.getX(),e.getY())){
                         int boardX = (e.getX() - ((getWidth()/2)+50))/50;
                         int boardY = (e.getY() - ((getHeight()/2)-250))/50;
 
                         boards = getLocalMove(boardX,boardY, 1);
                         
+                        //send the updated board to the game server
+                        sweeperClient.sendBoardToServer(boards);                        
                     }
                 }
                 turn = 0;
