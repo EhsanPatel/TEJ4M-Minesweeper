@@ -15,10 +15,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -148,33 +152,62 @@ public class Client extends JFrame {
 
     /**
      * Take a 4D array containing the board data and send it to the server.
+     *
      * @param boards the ungodly 4D boards array
      */
     public void sendBoardToServer(int[][][][] boards) {
-        
+
         //debug the calling of this method
         System.out.println("doing the serialization thing");
-        
+
         //setup a destination for the serialized boards
-        String serializedFileDest = "boards.ser";
-        
+        String serializedFileDest = System.getProperty("user.home")
+                + File.separator + "AppData" + File.separator + "Roaming" + File.separator + "Multiplayer MineSweeper"
+                + File.separator + "Client" + clientID; //just the directory structure. The file name is appened later
+
         //try the serialization
         try {
+            //enseure the file can be stored where it needs to
+            Files.createDirectories(Paths.get(serializedFileDest));
+
             //save the object in a file
-            FileOutputStream file = new FileOutputStream(serializedFileDest);
+            FileOutputStream file = new FileOutputStream(serializedFileDest + File.separator + "serialBoard.txt");
             ObjectOutputStream out = new ObjectOutputStream(file);
-            
+
             //Serialize the array
             out.writeObject(boards);
-            
+
             out.close();
             file.close();
-            
+
             System.out.println("Serialization complete");
-            
+
         } catch (IOException ex) {
             System.out.println("[Client #" + clientID + "] IOException in sendBoardToServer()\n" + ex);
         }
+        
+        /*
+        //deserialize test
+        System.out.println("Starting deserialization");
+        try {
+            //read if the object from the file
+            FileInputStream file = new FileInputStream(serializedFileDest + File.separator + "serialBoard.txt");
+            ObjectInputStream in = new ObjectInputStream(file);
+
+            //de-serialize
+            int[][][][] testArray = (int[][][][]) in.readObject(); //cast the Object to an array
+
+            in.close();
+            file.close();
+
+            System.out.println("Deserialization Complete");
+
+        } catch (IOException ex) {
+            System.out.println("[Client #" + clientID + "] IOException in sendBoardToServer()\n" + ex);
+        } catch (ClassNotFoundException ex) {
+            System.out.println("[Client #" + clientID + "] ClassNotFoundException in sendBoardToServer()\n" + ex);
+        }
+        */
     }
 
     public void setUpButton() {
