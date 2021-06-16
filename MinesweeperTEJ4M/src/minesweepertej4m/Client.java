@@ -19,11 +19,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -50,6 +46,8 @@ public class Client extends JFrame {
 
     private String destIp; //the IP of the destination server
     private int portNumber; //the port the server will be listening on
+    
+    private gameScreenFrame gameScreenFrame;
 
     private ClientSideConnection csc; //the socket type var to hold the connection for this Client
 
@@ -86,6 +84,9 @@ public class Client extends JFrame {
         messageToSend = new JTextArea();
         sendBtn = new JButton();
         fileBtn = new JButton();
+        
+        //this will be added later
+        gameScreenFrame = null;
 
         destIp = ip;
         portNumber = port;
@@ -145,6 +146,14 @@ public class Client extends JFrame {
         updateButtons();
         this.setVisible(true);
     }
+    
+    /**
+     * Mutator for the gameScreenFrame attribute
+     * @param gameScreenFrame 
+     */
+    public void setGameScreenFrame(gameScreenFrame gameScreenFrame){
+        this.gameScreenFrame = gameScreenFrame;
+    }
 
     public void connectToServer() {
         //set up the socket
@@ -189,7 +198,7 @@ public class Client extends JFrame {
             file.close();
 
             System.out.println("Serialization complete");
-
+            
         } catch (IOException ex) {
             System.out.println("[Client #" + clientID + "] IOException in sendBoardToServer()\n" + ex);
         }
@@ -359,12 +368,16 @@ public class Client extends JFrame {
                             ObjectInputStream in = new ObjectInputStream(file);
 
                             //de-serialize
-                            int[][][][] testArray = (int[][][][]) in.readObject(); //cast the Object to an array
+                            int[][][][] receiveArray = (int[][][][]) in.readObject(); //cast the Object to an array
 
                             in.close();
                             file.close();
 
                             System.out.println("Deserialization Complete");
+                            
+                            //method call to gameScreen
+                            gameScreenFrame.getGameScreenPanel().networkUpdateBoards(receiveArray);
+
 
                         } catch (IOException ex) {
                             System.out.println("[Client #" + clientID + "] IOException in sendBoardToServer()\n" + ex);

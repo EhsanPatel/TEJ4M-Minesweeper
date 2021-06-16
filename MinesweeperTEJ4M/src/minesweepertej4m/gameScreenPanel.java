@@ -121,6 +121,18 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         
     }
     
+    /**
+     * Update the game boards based of the array received by the network
+     * @param ungodlyArray 
+     */
+    public void networkUpdateBoards(int[][][][] ungodlyArray) {
+        
+        boards = ungodlyArray;
+        
+        repaint();
+        
+    }
+    
     
     /**
      * Draws all the components that change location or color etc
