@@ -124,7 +124,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
 //                game over you clicked on a bomb
 //            }
         }else if(currentAction.equals("flag")){
-            boards[boardNum][boardX][boardY][3] = 1;
+            boards[boardNum][boardX][boardY][3] = (boards[boardNum][boardX][boardY][3]+1)%2;
         }else if(currentAction.equals("bomb")){
             boards[(boardNum+1)%2][boardX][boardY][1] = 1;
         }
@@ -157,13 +157,21 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                 for (int k = 0; k < boards[i][j].length; k++) {
                     g2d.setColor(new Color(0,0,0));
                     g2d.fillRect(((getWidth()/2)-550) + (k*50) + (i*600),(getHeight()/2)-250 + (j*50),50,50);
-
+                    
+                    //draws a different color grid tile to mark covered and uncovered tiles
                     if(boards[i][k][j][0] == 0){
                         g2d.setColor(new Color(55, 57, 63));
                     }else{
                         g2d.setColor(new Color(255, 255, 255));
                     }
                     g2d.fillRect(((getWidth()/2)-550) + (k*50) + (i*600)+2,(getHeight()/2)-250 + (j*50)+2,46,46);
+                    
+                    
+                    if(boards[i][k][j][3] == 1){
+                        g2d.drawImage(GAME_FLAG,((getWidth()/2)-550) + (k*50) + (i*600)+10,(getHeight()/2)-250 + (j*50)+5,this);
+                    }
+                    
+                    
                 }
             }
         }
