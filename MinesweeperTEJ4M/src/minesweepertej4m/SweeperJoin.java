@@ -166,6 +166,9 @@ public class SweeperJoin extends javax.swing.JFrame {
             //hand the client off to the Game Screen
             theGame = new gameScreenFrame(client);
             
+            //set the gameScreenFrame attribute in the Client
+            client.setGameScreenFrame(theGame);
+            
             client.setUpButton();
             
         } catch (Exception e) {

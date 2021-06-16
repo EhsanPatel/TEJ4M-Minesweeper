@@ -129,6 +129,9 @@ public class SweeperCreate extends javax.swing.JFrame {
         //create a gameScreenFrame and Panel to show the client side game
         theGame = new gameScreenFrame(sweeperClient);
         
+        //set the gameScreenFrame attribute in the Client
+        sweeperClient.setGameScreenFrame(theGame);
+        
         sweeperClient.setUpButton();
 
     }//GEN-LAST:event_createBtnActionPerformed

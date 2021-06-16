@@ -29,6 +29,14 @@ public class gameScreenFrame extends JFrame {
     }
     
     /**
+     * Accessor for the gameScreenPanel
+     * @return 
+     */
+    public gameScreenPanel getGameScreenPanel() {
+        return theGameScreenPanel;
+    }
+    
+    /**
      * Set up the JFrame
      */
     private void initFrame() {
