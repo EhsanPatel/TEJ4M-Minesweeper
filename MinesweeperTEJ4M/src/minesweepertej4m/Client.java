@@ -170,7 +170,7 @@ public class Client extends JFrame {
         try {
             //enseure the file can be stored where it needs to
             Files.createDirectories(Paths.get(serializedFileDest));
-            
+
             //delete any file that might be there 
             Files.deleteIfExists(Paths.get(serializedFileDest + File.separator + "serialBoardToSend.txt"));
 
@@ -194,28 +194,6 @@ public class Client extends JFrame {
             System.out.println("[Client #" + clientID + "] IOException in sendBoardToServer()\n" + ex);
         }
 
-        /*
-        //deserialize test
-        System.out.println("Starting deserialization");
-        try {
-            //read if the object from the file
-            FileInputStream file = new FileInputStream(serializedFileDest + File.separator + "serialBoard.txt");
-            ObjectInputStream in = new ObjectInputStream(file);
-
-            //de-serialize
-            int[][][][] testArray = (int[][][][]) in.readObject(); //cast the Object to an array
-
-            in.close();
-            file.close();
-
-            System.out.println("Deserialization Complete");
-
-        } catch (IOException ex) {
-            System.out.println("[Client #" + clientID + "] IOException in sendBoardToServer()\n" + ex);
-        } catch (ClassNotFoundException ex) {
-            System.out.println("[Client #" + clientID + "] ClassNotFoundException in sendBoardToServer()\n" + ex);
-        }
-         */
     }
 
     public void setUpButton() {
@@ -251,7 +229,7 @@ public class Client extends JFrame {
                     updateButtons();
 
                     String filePath = saveFileLoader.getSelectedFile().getPath();
-                    
+
                     String fileName = filePath.substring(filePath.lastIndexOf(File.separator) + 1);
                     sendFilePrep(filePath, fileName);
 
@@ -294,7 +272,7 @@ public class Client extends JFrame {
             messageToSend.setText("");
 
             justPressedSend = true;
-            
+
             fileStream.close();
 
         } catch (FileNotFoundException exception) {
@@ -372,6 +350,28 @@ public class Client extends JFrame {
 
                         //close it
                         fos.close();
+
+                        //deserialize the data
+                        System.out.println("Starting deserialization");
+                        try {
+                            //read if the object from the file
+                            FileInputStream file = new FileInputStream(saveToPath + File.separator + fileName);
+                            ObjectInputStream in = new ObjectInputStream(file);
+
+                            //de-serialize
+                            int[][][][] testArray = (int[][][][]) in.readObject(); //cast the Object to an array
+
+                            in.close();
+                            file.close();
+
+                            System.out.println("Deserialization Complete");
+
+                        } catch (IOException ex) {
+                            System.out.println("[Client #" + clientID + "] IOException in sendBoardToServer()\n" + ex);
+                        } catch (ClassNotFoundException ex) {
+                            System.out.println("[Client #" + clientID + "] ClassNotFoundException in sendBoardToServer()\n" + ex);
+                        }
+
                     } catch (FileNotFoundException exception) {
                         JOptionPane.showMessageDialog(null, "There was an error saving the serialized board file:\n" + exception, "Loading Error", JOptionPane.ERROR_MESSAGE);
                     } catch (IOException exception) {
@@ -394,6 +394,22 @@ public class Client extends JFrame {
         updateButtons();
     }
 
+    /*
+    private void displayBoards(int metric, int[][][][] piss){
+        String msg = "";
+        //board format [whos board][x][y][covered, is bomb, # surrounding, is flagged]
+        for (int i = 0; i < piss.length; i++) {
+            msg += "\n\n\n\n";
+            for (int j = 0; j < piss[i].length; j++) {
+                msg += "\n";
+                for (int k = 0; k < piss[i][j].length; k++) {
+                    msg += piss[i][k][j][metric] + " ";
+                }
+            }
+        }
+        System.out.println(msg);
+    }
+     */
     private class FileTypeRecieve {
 
         private byte[] file;
