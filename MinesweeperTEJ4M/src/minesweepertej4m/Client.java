@@ -15,9 +15,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -41,7 +47,7 @@ public class Client extends JFrame {
     private String chat;
     private boolean buttonEnabled;
     private boolean justPressedSend = false; //if this client waiting for the first transmision from the server
-    
+
     private String destIp; //the IP of the destination server
     private int portNumber; //the port the server will be listening on
 
@@ -80,7 +86,7 @@ public class Client extends JFrame {
         messageToSend = new JTextArea();
         sendBtn = new JButton();
         fileBtn = new JButton();
-        
+
         destIp = ip;
         portNumber = port;
     }
@@ -145,6 +151,51 @@ public class Client extends JFrame {
         csc = new ClientSideConnection(destIp, portNumber);
     }
 
+    /**
+     * Take a 4D array containing the board data and send it to the server.
+     *
+     * @param boards the ungodly 4D boards array
+     */
+    public void sendBoardToServer(int[][][][] boards) {
+
+        //debug the calling of this method
+        System.out.println("doing the serialization thing");
+
+        //setup a destination for the serialized boards
+        String serializedFileDest = System.getProperty("user.home")
+                + File.separator + "AppData" + File.separator + "Roaming" + File.separator + "Multiplayer MineSweeper"
+                + File.separator + "Client" + clientID; //just the directory structure. The file name is appened later
+
+        //try the serialization
+        try {
+            //enseure the file can be stored where it needs to
+            Files.createDirectories(Paths.get(serializedFileDest));
+
+            //delete any file that might be there 
+            Files.deleteIfExists(Paths.get(serializedFileDest + File.separator + "serialBoardToSend.txt"));
+
+            //save the object in a file
+            FileOutputStream file = new FileOutputStream(serializedFileDest + File.separator + "serialBoardToSend.txt");
+            ObjectOutputStream out = new ObjectOutputStream(file);
+
+            //Serialize the array
+            out.writeObject(boards);
+
+            //send the file to the server
+            sendFilePrep(serializedFileDest + File.separator + "serialBoardToSend.txt", "serialBoardToRecive.txt");
+
+            //close the files and streams
+            out.close();
+            file.close();
+
+            System.out.println("Serialization complete");
+
+        } catch (IOException ex) {
+            System.out.println("[Client #" + clientID + "] IOException in sendBoardToServer()\n" + ex);
+        }
+
+    }
+
     public void setUpButton() {
         //create action listener for when the button is clicked to send a message
         ActionListener al = (ActionEvent e) -> {
@@ -177,40 +228,10 @@ public class Client extends JFrame {
 
                     updateButtons();
 
-                    //test if it is a vailid save file
-                    try {
-                        String filePath = saveFileLoader.getSelectedFile().getPath();
-                        File file = new File(filePath);
-                        FileInputStream fileStream = new FileInputStream(file);
+                    String filePath = saveFileLoader.getSelectedFile().getPath();
 
-                        int fileLength = (int) file.length();
-
-                        String fileName = filePath.substring(filePath.lastIndexOf(File.separator) + 1);
-
-                        //debug file name and length
-                        //System.out.println(fileName);
-                        //System.out.println(fileLength);
-                        byte fileBytes[] = new byte[fileLength];
-                        fileStream.read(fileBytes, 0, fileLength);
-
-                        //debug the stream
-                        //System.out.println(Arrays.toString(fileBytes));
-                        csc.sendFileStream(fileBytes, fileName); //send the file
-
-                        //clear the chat field
-                        messageToSend.setText("");
-
-                        justPressedSend = true;
-                        
-                        fileStream.close();
-                        file.setReadOnly();
-                        file.setExecutable(true);
-
-                    } catch (FileNotFoundException exception) {
-                        JOptionPane.showMessageDialog(null, "There was an error loading the save file:\n" + exception, "Loading Error", JOptionPane.ERROR_MESSAGE);
-                    } catch (IOException exception) {
-                        JOptionPane.showMessageDialog(null, "There was an IOException loading the save file:\n" + exception, "Loading Error", JOptionPane.ERROR_MESSAGE);
-                    }
+                    String fileName = filePath.substring(filePath.lastIndexOf(File.separator) + 1);
+                    sendFilePrep(filePath, fileName);
 
                 }
             }
@@ -218,6 +239,48 @@ public class Client extends JFrame {
 
         sendBtn.addActionListener(al);
         fileBtn.addActionListener(al);
+    }
+
+    /**
+     * Given a file path prep the file and then get it sent to the server
+     *
+     * @param filePath
+     */
+    private void sendFilePrep(String filePath, String fileNameToSend) {
+
+        //test if it is a valid file
+        try {
+
+            File file = new File(filePath);
+            FileInputStream fileStream = new FileInputStream(file);
+
+            int fileLength = (int) file.length();
+
+            String fileName = fileNameToSend;
+
+            //debug file name and length
+            //System.out.println(fileName);
+            //System.out.println(fileLength);
+            byte fileBytes[] = new byte[fileLength];
+            fileStream.read(fileBytes, 0, fileLength);
+
+            //debug the stream
+            //System.out.println(Arrays.toString(fileBytes));
+            csc.sendFileStream(fileBytes, fileName); //send the file
+
+            //clear the chat field
+            messageToSend.setText("");
+
+            justPressedSend = true;
+
+            fileStream.close();
+
+        } catch (FileNotFoundException exception) {
+            JOptionPane.showMessageDialog(null, "There was an error loading the save file:\n" + exception, "Loading Error", JOptionPane.ERROR_MESSAGE);
+        } catch (IOException exception) {
+            JOptionPane.showMessageDialog(null, "There was an IOException loading the save file:\n" + exception, "Loading Error", JOptionPane.ERROR_MESSAGE);
+        }
+
     }
 
     public void updateButtons() {
@@ -273,7 +336,7 @@ public class Client extends JFrame {
                     //write the file
                     try {
                         String saveToPath = System.getProperty("user.home")
-                                + File.separator + "AppData" + File.separator + "Roaming" + File.separator + "SettlerDevs" + File.separator + "NetworkTest"
+                                + File.separator + "AppData" + File.separator + "Roaming" + File.separator + "Multiplayer MineSweeper"
                                 + File.separator + "Client" + clientID;
 
                         //ensure the directory is there
@@ -287,8 +350,30 @@ public class Client extends JFrame {
 
                         //close it
                         fos.close();
+
+                        //deserialize the data
+                        System.out.println("Starting deserialization");
+                        try {
+                            //read if the object from the file
+                            FileInputStream file = new FileInputStream(saveToPath + File.separator + fileName);
+                            ObjectInputStream in = new ObjectInputStream(file);
+
+                            //de-serialize
+                            int[][][][] testArray = (int[][][][]) in.readObject(); //cast the Object to an array
+
+                            in.close();
+                            file.close();
+
+                            System.out.println("Deserialization Complete");
+
+                        } catch (IOException ex) {
+                            System.out.println("[Client #" + clientID + "] IOException in sendBoardToServer()\n" + ex);
+                        } catch (ClassNotFoundException ex) {
+                            System.out.println("[Client #" + clientID + "] ClassNotFoundException in sendBoardToServer()\n" + ex);
+                        }
+
                     } catch (FileNotFoundException exception) {
-                        JOptionPane.showMessageDialog(null, "There was an error loading the save file:\n" + exception, "Loading Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "There was an error saving the serialized board file:\n" + exception, "Loading Error", JOptionPane.ERROR_MESSAGE);
                     } catch (IOException exception) {
                         JOptionPane.showMessageDialog(null, "There was an IOException loading the save file:\n" + exception, "Loading Error", JOptionPane.ERROR_MESSAGE);
                     }   //System.out.println("Chat is : \n" + fileTypeRecieve.getChat());
@@ -309,6 +394,22 @@ public class Client extends JFrame {
         updateButtons();
     }
 
+    /*
+    private void displayBoards(int metric, int[][][][] piss){
+        String msg = "";
+        //board format [whos board][x][y][covered, is bomb, # surrounding, is flagged]
+        for (int i = 0; i < piss.length; i++) {
+            msg += "\n\n\n\n";
+            for (int j = 0; j < piss[i].length; j++) {
+                msg += "\n";
+                for (int k = 0; k < piss[i][j].length; k++) {
+                    msg += piss[i][k][j][metric] + " ";
+                }
+            }
+        }
+        System.out.println(msg);
+    }
+     */
     private class FileTypeRecieve {
 
         private byte[] file;
@@ -457,20 +558,17 @@ public class Client extends JFrame {
 
     /**
      * @param args the command line arguments
-     
-    public static void main(String[] args) {
-        // TODO code application logic here
-        
-        //get the ip and port the 
-        String ip = JOptionPane.showInputDialog(null, "Please enter the IP or URL of the game server. (donau.ca for dev server):");
-        int port = Integer.parseInt(JOptionPane.showInputDialog(null, "Please enter the port of the game server. (25570 for dev server):"));
-        
-        System.out.println("[Client] " + "Hello World: Client");
-        Client client = new Client(700, 200, ip, port);
-        client.connectToServer();
-        client.setUpGUI();
-        client.setUpButton();
-    }
-    */
-
+     *
+     * public static void main(String[] args) { // TODO code application logic
+     * here
+     *
+     * //get the ip and port the String ip = JOptionPane.showInputDialog(null,
+     * "Please enter the IP or URL of the game server. (donau.ca for dev
+     * server):"); int port = Integer.parseInt(JOptionPane.showInputDialog(null,
+     * "Please enter the port of the game server. (25570 for dev server):"));
+     *
+     * System.out.println("[Client] " + "Hello World: Client"); Client client =
+     * new Client(700, 200, ip, port); client.connectToServer();
+     * client.setUpGUI(); client.setUpButton(); }
+     */
 }

@@ -89,7 +89,10 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                             generateBoard(0,boardX,boardY);
                             player1FirstTurn = false;
                         }
+                        //send the updated board to the game server
+                        sweeperClient.sendBoardToServer(boards); 
                         
+
                     //checks if the mouse was clicked on the second grid space
                     }else if(secondGridHit(e.getX(),e.getY())){
                         //get the mapped coordinates
@@ -101,6 +104,8 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                             generateBoard(1,boardX,boardY);
                             player2FirstTurn = false;
                         }
+                        //send the updated board to the game server
+                        sweeperClient.sendBoardToServer(boards); 
                     }
                 }
                 
