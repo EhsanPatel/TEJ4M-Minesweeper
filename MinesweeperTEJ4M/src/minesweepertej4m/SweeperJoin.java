@@ -14,6 +14,8 @@ public class SweeperJoin extends javax.swing.JFrame {
     MainMenuFrame menuRef;
     Server sweeperServer;
     Client client;
+    
+    gameScreenFrame theGame;
 
     /**
      * Creates new form SweeperCreate
@@ -75,7 +77,7 @@ public class SweeperJoin extends javax.swing.JFrame {
 
         ipInfoLbl.setText("What is the IP or URL of the server? (donau.ca for dev server)");
 
-        ipTxtFld.setText("donau.ca");
+        ipTxtFld.setText("localhost");
         ipTxtFld.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ipTxtFldActionPerformed(evt);
@@ -151,7 +153,7 @@ public class SweeperJoin extends javax.swing.JFrame {
 
       private void findServer() {
         if (client == null) {
-            //create a new client and don't request any colour
+            //create a new client
             client = new Client(700, 200, ipTxtFld.getText(), Integer.parseInt(portTxtFld.getText()));
         }
         //create a CatanClient and connect to the ip specified
@@ -160,6 +162,10 @@ public class SweeperJoin extends javax.swing.JFrame {
             //try to connect
             client.connectToServer();
             client.setUpGUI();
+            
+            //hand the client off to the Game Screen
+            theGame = new gameScreenFrame(client);
+            
             client.setUpButton();
             
         } catch (Exception e) {

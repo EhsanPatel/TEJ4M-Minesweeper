@@ -14,6 +14,8 @@ public class SweeperCreate extends javax.swing.JFrame {
     MainMenuFrame menuRef;
     Server sweeperServer;
     Client sweeperClient;
+    
+    gameScreenFrame theGame;
 
     /**
      * Creates new form SweeperCreate
@@ -123,6 +125,10 @@ public class SweeperCreate extends javax.swing.JFrame {
         sweeperClient = new Client(700, 300, "localhost", Integer.parseInt(portTxtFld.getText()));
         sweeperClient.connectToServer();
         sweeperClient.setUpGUI();
+        
+        //create a gameScreenFrame and Panel to show the client side game
+        theGame = new gameScreenFrame(sweeperClient);
+        
         sweeperClient.setUpButton();
 
     }//GEN-LAST:event_createBtnActionPerformed

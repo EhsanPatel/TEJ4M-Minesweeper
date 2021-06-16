@@ -25,6 +25,9 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     //the parent frame
     private gameScreenFrame gameScreenFrameRef;
     
+    //the client from the parent Frame and also for this Panel
+    private Client sweeperClient;
+    
     //panel variables
     private static int[][] buttons;
     private static boolean firstFrame = true;
@@ -40,10 +43,15 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     
     /**
      * Constructor for this panel to be drawn
+     * @param m
+     * @param sweeperClient
      */
-    public gameScreenPanel(gameScreenFrame m) {
+    public gameScreenPanel(gameScreenFrame m, Client sweeperClient) {
         //stores the parent frame passed in
         gameScreenFrameRef = m;
+        
+        //store the Client
+        this.sweeperClient = sweeperClient;
         
         //recieves mouse motion input
         addMouseMotionListener(this);
