@@ -7,6 +7,7 @@ package minesweepertej4m;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -211,6 +212,8 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
             }
         }
         
+        updateNumbers();
+        
         //switches turn: may need to move into specific actions to be flag at any time
         turn = (turn+1)%2;
         
@@ -219,20 +222,47 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         return boards;
     }
     
+    
+    private void updateNumbers(){
+        for (int i = 0; i < boards.length; i++) {
+            for (int j = 0; j < boards[i].length; j++) {
+                for (int k = 0; k < boards[i][j].length; k++) {
+                    boards[i][k][j][2] = 0;
+                    for (int l = -1; l < 2; l++) {
+                        for (int m = -1; m < 2; m++) {
+                            if(k+l >= 0 && k+l < 10 && j+m >= 0 && j+m < 10){
+                                boards[i][k][j][2] += boards[i][k+l][j+m][1];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    
     private void generateBoard(int boardNum, int startX, int startY){
         int bombCount = 0;
         
         Random rand = new Random();
-        while(bombCount < 30){
+        while(bombCount < 27){
             int randX = rand.nextInt(10);
             int randY = rand.nextInt(10);
+            boolean test = true;
+            for (int l = -1; l < 2; l++) {
+                for (int m = -1; m < 2; m++) {
+                    if(startX+l == randX && startY+m == randY){
+                        test = false;
+                    }
+                }
+            }
             
-            if(boards[boardNum][randX][randY][1] != 1 && !(randX == startX && randY == startY)){
+            if(test && boards[boardNum][randX][randY][1] != 1 && !(randX == startX && randY == startY)){
                 boards[boardNum][randX][randY][1] = 1;
                 bombCount++;
             }
         }
-        
+        updateNumbers();
         displayBoards(1);
     }
 
@@ -282,6 +312,14 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                     if(boards[i][k][j][1] == 1){
                         g2d.drawImage(GAME_BOMB,((getWidth()/2)-550) + (k*50) + (i*600)+2,(getHeight()/2)-250 + (j*50)+2,this);
                     }
+                    
+                    //displays a number if the square has been uncovered
+                    if(boards[i][k][j][0] == 1){
+                        g2d.setColor(new Color(0, 0, 0));
+                        g2d.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+                        g2d.drawString(""+boards[i][k][j][2],((getWidth()/2)-550) + (k*50) + (i*600)+17,(getHeight()/2)-250 + (j*50)+36);
+                    }
+
                 }
             }
         }
