@@ -5,10 +5,12 @@
  */
 package minesweepertej4m;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Stroke;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -85,6 +87,18 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         Graphics2D g2d = (Graphics2D) g;
         displayBoardsGUI(g2d);
         
+        //highlights the current action
+        Stroke oldStroke = g2d.getStroke();
+        g2d.setStroke(new BasicStroke(4));
+        int x = 0;
+        int y = 0;
+        
+        if(currentAction.equals("flag")){
+            
+        }
+        
+        g2d.drawRect(x,y,85,85);
+        g2d.setStroke(oldStroke);
         //draw boards on screen
     }
     
@@ -119,12 +133,16 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
             //generate the board as the first move always
         }
         if(currentAction.equals("scout")){
-            boards[boardNum][boardX][boardY][0] = 1;
+            if(boards[boardNum][boardX][boardY][3] == 0){
+                boards[boardNum][boardX][boardY][0] = 1;
+            }
 //            if(boards[boardNum][boardX][boardY][1] == 1){
 //                game over you clicked on a bomb
 //            }
         }else if(currentAction.equals("flag")){
-            boards[boardNum][boardX][boardY][3] = (boards[boardNum][boardX][boardY][3]+1)%2;
+            if(boards[boardNum][boardX][boardY][0] == 0){
+                boards[boardNum][boardX][boardY][3] = (boards[boardNum][boardX][boardY][3]+1)%2;
+            }
         }else if(currentAction.equals("bomb")){
             boards[(boardNum+1)%2][boardX][boardY][1] = 1;
         }
