@@ -171,12 +171,16 @@ public class Client extends JFrame {
             Files.createDirectories(Paths.get(serializedFileDest));
 
             //save the object in a file
-            FileOutputStream file = new FileOutputStream(serializedFileDest + File.separator + "serialBoard.txt");
+            FileOutputStream file = new FileOutputStream(serializedFileDest + File.separator + "serialBoardToSend.txt");
             ObjectOutputStream out = new ObjectOutputStream(file);
 
             //Serialize the array
             out.writeObject(boards);
+            
+            //send the file to the server
+            sendFilePrep(serializedFileDest + File.separator + "serialBoardToRecieve.txt");
 
+            //close the files and streams
             out.close();
             file.close();
 
@@ -185,7 +189,7 @@ public class Client extends JFrame {
         } catch (IOException ex) {
             System.out.println("[Client #" + clientID + "] IOException in sendBoardToServer()\n" + ex);
         }
-        
+
         /*
         //deserialize test
         System.out.println("Starting deserialization");
@@ -207,7 +211,7 @@ public class Client extends JFrame {
         } catch (ClassNotFoundException ex) {
             System.out.println("[Client #" + clientID + "] ClassNotFoundException in sendBoardToServer()\n" + ex);
         }
-        */
+         */
     }
 
     public void setUpButton() {
@@ -242,40 +246,9 @@ public class Client extends JFrame {
 
                     updateButtons();
 
-                    //test if it is a vailid save file
-                    try {
-                        String filePath = saveFileLoader.getSelectedFile().getPath();
-                        File file = new File(filePath);
-                        FileInputStream fileStream = new FileInputStream(file);
-
-                        int fileLength = (int) file.length();
-
-                        String fileName = filePath.substring(filePath.lastIndexOf(File.separator) + 1);
-
-                        //debug file name and length
-                        //System.out.println(fileName);
-                        //System.out.println(fileLength);
-                        byte fileBytes[] = new byte[fileLength];
-                        fileStream.read(fileBytes, 0, fileLength);
-
-                        //debug the stream
-                        //System.out.println(Arrays.toString(fileBytes));
-                        csc.sendFileStream(fileBytes, fileName); //send the file
-
-                        //clear the chat field
-                        messageToSend.setText("");
-
-                        justPressedSend = true;
-
-                        fileStream.close();
-                        file.setReadOnly();
-                        file.setExecutable(true);
-
-                    } catch (FileNotFoundException exception) {
-                        JOptionPane.showMessageDialog(null, "There was an error loading the save file:\n" + exception, "Loading Error", JOptionPane.ERROR_MESSAGE);
-                    } catch (IOException exception) {
-                        JOptionPane.showMessageDialog(null, "There was an IOException loading the save file:\n" + exception, "Loading Error", JOptionPane.ERROR_MESSAGE);
-                    }
+                    String filePath = saveFileLoader.getSelectedFile().getPath();
+                    
+                    sendFilePrep(filePath);
 
                 }
             }
@@ -283,6 +256,50 @@ public class Client extends JFrame {
 
         sendBtn.addActionListener(al);
         fileBtn.addActionListener(al);
+    }
+
+    /**
+     * Given a file path prep the file and then get it sent to the server
+     *
+     * @param filePath
+     */
+    private void sendFilePrep(String filePath) {
+
+        //test if it is a vailid file
+        try {
+
+            File file = new File(filePath);
+            FileInputStream fileStream = new FileInputStream(file);
+
+            int fileLength = (int) file.length();
+
+            String fileName = filePath.substring(filePath.lastIndexOf(File.separator) + 1);
+
+            //debug file name and length
+            //System.out.println(fileName);
+            //System.out.println(fileLength);
+            byte fileBytes[] = new byte[fileLength];
+            fileStream.read(fileBytes, 0, fileLength);
+
+            //debug the stream
+            //System.out.println(Arrays.toString(fileBytes));
+            csc.sendFileStream(fileBytes, fileName); //send the file
+
+            //clear the chat field
+            messageToSend.setText("");
+
+            justPressedSend = true;
+
+            fileStream.close();
+            file.setReadOnly();
+            file.setExecutable(true);
+
+        } catch (FileNotFoundException exception) {
+            JOptionPane.showMessageDialog(null, "There was an error loading the save file:\n" + exception, "Loading Error", JOptionPane.ERROR_MESSAGE);
+        } catch (IOException exception) {
+            JOptionPane.showMessageDialog(null, "There was an IOException loading the save file:\n" + exception, "Loading Error", JOptionPane.ERROR_MESSAGE);
+        }
+
     }
 
     public void updateButtons() {
