@@ -77,7 +77,7 @@ public class SweeperJoin extends javax.swing.JFrame {
 
         ipInfoLbl.setText("What is the IP or URL of the server? (donau.ca for dev server)");
 
-        ipTxtFld.setText("donau.ca");
+        ipTxtFld.setText("localhost");
         ipTxtFld.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ipTxtFldActionPerformed(evt);
