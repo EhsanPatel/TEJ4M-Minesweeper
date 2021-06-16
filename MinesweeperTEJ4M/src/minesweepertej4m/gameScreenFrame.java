@@ -16,10 +16,15 @@ public class gameScreenFrame extends JFrame {
     //stores the panel child component
     private gameScreenPanel theGameScreenPanel;
     
+    //stores the Client Object that will transmit for this class
+    private Client sweeperClient;
+    
     /**
      * Constructor for this JFrame
+     * @param c
      */
-    public gameScreenFrame(){
+    public gameScreenFrame(Client c){
+        sweeperClient = c;
         initFrame();
     }
     
@@ -27,20 +32,11 @@ public class gameScreenFrame extends JFrame {
      * Set up the JFrame
      */
     private void initFrame() {
-        theGameScreenPanel = new gameScreenPanel(this); //creates a new blank game
+        theGameScreenPanel = new gameScreenPanel(this, sweeperClient); //creates a new blank game
         setTitle("Multiplayer MineSweeper");
         setExtendedState(JFrame.MAXIMIZED_BOTH); //Fullscreen
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         add(theGameScreenPanel); //adds it to the JFrame
         setVisible(true);
-    }
-    
-    /**
-     * TO BE DELETED ONCE THE SCREENS ARE CONNECTED
-     */
-    public static void main(String[] args) {
-        //Open the main menu
-        gameScreenFrame g = new gameScreenFrame();
-        
     }
 }
