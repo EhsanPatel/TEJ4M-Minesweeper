@@ -32,7 +32,9 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     
     //panel variables
     private static int[][] buttons;
-    private static boolean firstFrame = true;
+//    private static boolean firstFrame = true;
+    private static boolean player1FirstTurn = true;
+    private static boolean player2FirstTurn = true;
     private Timer timer;
 
     //game variables
@@ -82,6 +84,10 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                         int boardY = (e.getY() - ((getHeight()/2)-250))/50;
                         //update the board
                         boards = getLocalMove(boardX,boardY, 0);
+                        if(player1FirstTurn){
+                            generateBoard(0,boardX,boardY);
+                            player1FirstTurn = false;
+                        }
                         
                     //checks if the mouse was clicked on the second grid space
                     }else if(secondGridHit(e.getX(),e.getY())){
@@ -90,6 +96,10 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                         int boardY = (e.getY() - ((getHeight()/2)-250))/50;
                         //update the board
                         boards = getLocalMove(boardX,boardY, 1);
+                        if(player2FirstTurn){
+                            generateBoard(1,boardX,boardY);
+                            player2FirstTurn = false;
+                        }
                     }
                 }
                 
@@ -185,9 +195,9 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                 //uncovers the tile
                 boards[boardNum][boardX][boardY][0] = 1;
             }
-//            if(boards[boardNum][boardX][boardY][1] == 1){
-//                game over you clicked on a bomb
-//            }
+            if(boards[boardNum][boardX][boardY][1] == 1){
+                System.out.println("Game over, you clicked on a bomb");
+            }
         }else if(currentAction.equals("flag")){
             //checks to make sure that the place you want to flag is not uncovered already
             if(boards[boardNum][boardX][boardY][0] == 0){
@@ -196,7 +206,9 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
             }
         }else if(currentAction.equals("bomb")){
             //places a bomb
-            boards[(boardNum+1)%2][boardX][boardY][1] = 1;
+            if(boards[boardNum][boardX][boardY][0] == 0){
+                boards[boardNum][boardX][boardY][1] = 1;
+            }
         }
         
         //switches turn: may need to move into specific actions to be flag at any time
@@ -207,7 +219,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         return boards;
     }
     
-    private void generateBoard(int boardNum){
+    private void generateBoard(int boardNum, int startX, int startY){
         int bombCount = 0;
         
         Random rand = new Random();
@@ -215,7 +227,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
             int randX = rand.nextInt(10);
             int randY = rand.nextInt(10);
             
-            if(boards[boardNum][randX][randY][1] != 1){
+            if(boards[boardNum][randX][randY][1] != 1 && !(randX == startX && randY == startY)){
                 boards[boardNum][randX][randY][1] = 1;
                 bombCount++;
             }
@@ -254,6 +266,8 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                     //draws a different color grid tile to mark covered and uncovered tiles
                     if(boards[i][k][j][0] == 0){
                         g2d.setColor(new Color(55, 57, 63));
+                    }else if(boards[i][k][j][0] == 1 && boards[i][k][j][1] == 1){
+                        g2d.setColor(new Color(255, 57, 63));
                     }else{
                         g2d.setColor(new Color(255, 255, 255));
                     }
@@ -350,11 +364,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
             {(getWidth()/2)-(NAV_PLACE.getWidth(this)/2)+140, getHeight()-90, 80, 80}, //Place
             {getWidth()-320, getHeight()-90, 296, 80} //Quit
         };
-        if(firstFrame){
-            generateBoard(0);
-            generateBoard(1);
-            firstFrame = false;
-        }
+        
         super.paintComponent(g);  //prep the panel for drawing
         drawStaticComponents(g);  //draw the main menu
         drawDynamicComponents(g); //draw the changing components
