@@ -42,5 +42,6 @@ public class ResourcesRef {
     public final static Image NAV_QUIT = new ImageIcon(ResourcesRef.class.getResource("images/navigation/quit.png")).getImage().getScaledInstance(296, 80, Image.SCALE_AREA_AVERAGING);
     
     public final static Image GAME_FLAG = new ImageIcon(ResourcesRef.class.getResource("images/gamePanel/flag2.png")).getImage().getScaledInstance(31, 40, Image.SCALE_AREA_AVERAGING);
+    public final static Image GAME_BOMB = new ImageIcon(ResourcesRef.class.getResource("images/gamePanel/bomb.png")).getImage().getScaledInstance(46, 46, Image.SCALE_AREA_AVERAGING);
 
 }

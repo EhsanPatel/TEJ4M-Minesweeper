@@ -19,6 +19,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import java.util.Random;
+
 import static resources.ResourcesRef.*;
 
 public class gameScreenPanel extends JPanel implements ActionListener, MouseMotionListener {
@@ -204,6 +206,23 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         //displayBoards(0);
         return boards;
     }
+    
+    private void generateBoard(int boardNum){
+        int bombCount = 0;
+        
+        Random rand = new Random();
+        while(bombCount < 30){
+            int randX = rand.nextInt(10);
+            int randY = rand.nextInt(10);
+            
+            if(boards[boardNum][randX][randY][1] != 1){
+                boards[boardNum][randX][randY][1] = 1;
+                bombCount++;
+            }
+        }
+        
+        displayBoards(1);
+    }
 
     /**
      * Used to print out information to the console
@@ -244,6 +263,10 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                     //draws a flag on all the tiles that the user has selected to have a flag on
                     if(boards[i][k][j][3] == 1){
                         g2d.drawImage(GAME_FLAG,((getWidth()/2)-550) + (k*50) + (i*600)+10,(getHeight()/2)-250 + (j*50)+5,this);
+                    }
+                    //draws a bomb on all the tiles that the user has selected to have a flag on
+                    if(boards[i][k][j][1] == 1){
+                        g2d.drawImage(GAME_BOMB,((getWidth()/2)-550) + (k*50) + (i*600)+2,(getHeight()/2)-250 + (j*50)+2,this);
                     }
                 }
             }
@@ -327,6 +350,11 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
             {(getWidth()/2)-(NAV_PLACE.getWidth(this)/2)+140, getHeight()-90, 80, 80}, //Place
             {getWidth()-320, getHeight()-90, 296, 80} //Quit
         };
+        if(firstFrame){
+            generateBoard(0);
+            generateBoard(1);
+            firstFrame = false;
+        }
         super.paintComponent(g);  //prep the panel for drawing
         drawStaticComponents(g);  //draw the main menu
         drawDynamicComponents(g); //draw the changing components
