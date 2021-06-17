@@ -74,6 +74,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                 
                 
                 //receive whos turn it is from the server here
+                sweeperClient.getClientID(); //still need to do something with this data
                 //change the if statement below to make sure that it is your turn and not other client
                 
                 

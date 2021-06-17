@@ -154,6 +154,14 @@ public class Client extends JFrame {
     public void setGameScreenFrame(gameScreenFrame gameScreenFrame){
         this.gameScreenFrame = gameScreenFrame;
     }
+    
+    /**
+     * Accessor for the clientID
+     * @return 
+     */
+    public int getClientID() {
+       return clientID;
+    }
 
     public void connectToServer() {
         //set up the socket
