@@ -24,6 +24,7 @@ public class SweeperJoin extends javax.swing.JFrame {
      */
     public SweeperJoin(MainMenuFrame m) {
         menuRef = m;
+        MainMenuFrame.setIcon(this);
         initComponents();
     }
 
