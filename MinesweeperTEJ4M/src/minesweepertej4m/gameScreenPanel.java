@@ -34,9 +34,9 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     
     //panel variables
     private static int[][] buttons;
-//    private static boolean firstFrame = true;
     private static boolean player1FirstTurn = true;
     private static boolean player2FirstTurn = true;
+    private boolean isValid = false;
     private Timer timer;
 
     //game variables
@@ -94,37 +94,41 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                 if(turn == 0){
 
                     //checks if the mouse was clicked on the first grid space
-                    if(firstGridHit(e.getX(),e.getY()) && ((id == 2 && currentAction.equals("bomb"))||(id == 1 && !currentAction.equals("bomb")))){
+                    if(firstGridHit(e.getX(),e.getY()) && ((id == 2 && currentAction.equals("bomb") && !player2FirstTurn)||(id == 1 && !currentAction.equals("bomb")))){
                         //get the mapped coordinates
                         int boardX = (e.getX() - ((getWidth()/2)-550))/50;
                         int boardY = (e.getY() - ((getHeight()/2)-250))/50;
                         //update the board
                         boards = getLocalMove(boardX,boardY, 0);
-                        if(player1FirstTurn){
-                            generateBoard(0,boardX,boardY);
-                            player1FirstTurn = false;
-                        }
-                        revealTiles(boardX, boardY, 0);
-                        if(!currentAction.equals("flag")){
-                        //send the updated board to the game server
-                        sweeperClient.sendBoardToServer(boards); 
+                        
+                        if(isValid){
+                            if(player1FirstTurn){
+                                generateBoard(0,boardX,boardY);
+                                player1FirstTurn = false;
+                            }
+                            revealTiles(boardX, boardY, 0);
+                            //send the updated board to the game server
+                            sweeperClient.sendBoardToServer(boards);
+                            isValid = false;
                         }
 
                     //checks if the mouse was clicked on the second grid space
-                    }else if(secondGridHit(e.getX(),e.getY()) && ((id == 1 && currentAction.equals("bomb"))||(id == 2 && !currentAction.equals("bomb")))){
+                    }else if(secondGridHit(e.getX(),e.getY()) && ((id == 1 && currentAction.equals("bomb") && !player1FirstTurn)||(id == 2 && !currentAction.equals("bomb")))){
                         //get the mapped coordinates
                         int boardX = (e.getX() - ((getWidth()/2)+50))/50;
                         int boardY = (e.getY() - ((getHeight()/2)-250))/50;
                         //update the board
                         boards = getLocalMove(boardX,boardY, 1);
-                        if(player2FirstTurn){
-                            generateBoard(1,boardX,boardY);
-                            player2FirstTurn = false;
-                        }
-                        revealTiles(boardX, boardY, 1);
-                        if(!currentAction.equals("flag")){
-                        //send the updated board to the game server
-                        sweeperClient.sendBoardToServer(boards);
+                        
+                        if(isValid){
+                            if(player2FirstTurn){
+                                generateBoard(1,boardX,boardY);
+                                player2FirstTurn = false;
+                            }
+                            revealTiles(boardX, boardY, 1);
+                            //send the updated board to the game server
+                            sweeperClient.sendBoardToServer(boards);
+                            isValid = false;
                         }
                     }
                 }
@@ -255,13 +259,15 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
             if(boards[boardNum][boardX][boardY][3] == 0){
                 //uncovers the tile
                 boards[boardNum][boardX][boardY][0] = 1;
+                isValid = true;
+                //switches turn: may need to move into specific actions to be flag at any time
+                turn = (turn + 1) % 2;
             }
             if(boards[boardNum][boardX][boardY][1] == 1){
                 showBombs = true;
                 System.out.println("Game over, you clicked on a bomb");
             }
-            //switches turn: may need to move into specific actions to be flag at any time
-            turn = (turn + 1) % 2;
+            
         }else if(currentAction.equals("flag")){
             //checks to make sure that the place you want to flag is not uncovered already
             if(boards[boardNum][boardX][boardY][0] == 0){
@@ -270,11 +276,13 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
             }
         }else if(currentAction.equals("bomb")){
             //places a bomb
-            if(boards[boardNum][boardX][boardY][0] == 0){
+            if(boards[boardNum][boardX][boardY][0] == 0 && boards[boardNum][boardX][boardY][1] != 1){
                 boards[boardNum][boardX][boardY][1] = 1;
+                isValid = true;
+                //switches turn: may need to move into specific actions to be flag at any time
+                turn = (turn + 1) % 2;
             }
-            //switches turn: may need to move into specific actions to be flag at any time
-            turn = (turn + 1) % 2;
+            
         }
         
         updateNumbers();
@@ -286,14 +294,17 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     
     
     private void revealTiles(int boardX, int boardY, int boardNum){
-        for (int i = -1; i < 2; i++) {
-            for (int j = -1; j < 2; j++) {
-                if(boardX+i >= 0 && boardX+i < 10 && boardY+j >= 0 && boardY+j < 10){
-                    if(boards[boardNum][boardX][boardY][2] == 0 && boards[boardNum][boardX+i][boardY+j][2] == 0 && boards[boardNum][boardX+i][boardY+j][0] == 0 && !(i == 0 && j == 0)){
-                        boards[boardNum][boardX+i][boardY+j][0] = 1;
-                        revealTiles(boardX+i, boardY+j, boardNum);
-                    }else if(boards[boardNum][boardX][boardY][2] == 0){
-                        boards[boardNum][boardX+i][boardY+j][0] = 1;
+        if(currentAction.equals("scout") && boards[boardNum][boardX][boardY][3] == 0){
+            for (int i = -1; i < 2; i++) {
+                for (int j = -1; j < 2; j++) {
+                    if(boardX+i >= 0 && boardX+i < 10 && boardY+j >= 0 && boardY+j < 10){
+                        if(boards[boardNum][boardX][boardY][2] == 0 && boards[boardNum][boardX+i][boardY+j][2] == 0 && boards[boardNum][boardX+i][boardY+j][0] == 0 && !(i == 0 && j == 0)){
+                            boards[boardNum][boardX+i][boardY+j][0] = 1;
+                            revealTiles(boardX+i, boardY+j, boardNum);
+                        }else if(boards[boardNum][boardX][boardY][2] == 0){
+                            boards[boardNum][boardX+i][boardY+j][0] = 1;
+                            boards[boardNum][boardX+i][boardY+j][3] = 0;
+                        }
                     }
                 }
             }
