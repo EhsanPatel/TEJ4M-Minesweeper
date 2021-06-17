@@ -105,9 +105,10 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                             player1FirstTurn = false;
                         }
                         revealTiles(boardX, boardY, 0);
+                        if(!currentAction.equals("flag")){
                         //send the updated board to the game server
                         sweeperClient.sendBoardToServer(boards); 
-                        
+                        }
 
                     //checks if the mouse was clicked on the second grid space
                     }else if(secondGridHit(e.getX(),e.getY()) && ((id == 1 && currentAction.equals("bomb"))||(id == 2 && !currentAction.equals("bomb")))){
@@ -121,8 +122,10 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                             player2FirstTurn = false;
                         }
                         revealTiles(boardX, boardY, 1);
+                        if(!currentAction.equals("flag")){
                         //send the updated board to the game server
-                        sweeperClient.sendBoardToServer(boards); 
+                        sweeperClient.sendBoardToServer(boards);
+                        }
                     }
                 }
             }
@@ -257,6 +260,8 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                 showBombs = true;
                 System.out.println("Game over, you clicked on a bomb");
             }
+            //switches turn: may need to move into specific actions to be flag at any time
+            turn = (turn + 1) % 2;
         }else if(currentAction.equals("flag")){
             //checks to make sure that the place you want to flag is not uncovered already
             if(boards[boardNum][boardX][boardY][0] == 0){
@@ -268,12 +273,11 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
             if(boards[boardNum][boardX][boardY][0] == 0){
                 boards[boardNum][boardX][boardY][1] = 1;
             }
+            //switches turn: may need to move into specific actions to be flag at any time
+            turn = (turn + 1) % 2;
         }
         
         updateNumbers();
-        
-        //switches turn: may need to move into specific actions to be flag at any time
-        turn = (turn+1)%2;
         
         //prints the boards to the system output: FOR DEBUGGING
         //displayBoards(0);
