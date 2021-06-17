@@ -161,7 +161,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         
         
         //outlines the grid of who's turn it is
-        g2d.setColor(new Color(0, 26, 10));
+        g2d.setColor(new Color(0,0,0));
         
         //which grid to outline is dependant on the id and the turn
         if(id == 1){
