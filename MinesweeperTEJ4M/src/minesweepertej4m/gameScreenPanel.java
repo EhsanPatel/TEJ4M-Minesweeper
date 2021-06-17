@@ -11,6 +11,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -158,6 +159,18 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         //The graphics model to use
         Graphics2D g2d = (Graphics2D) g;
         
+        
+        //outlines the grid of who's turn it is
+        g2d.setColor(new Color(0, 26, 10));
+        
+        //which grid to outline is dependant on the id and the turn
+        if(id == 1){
+            g2d.fillRect((getWidth() / 2) - (560) + turn * 600, (getHeight() / 2) - 260, 520, 520);
+        }else{
+            g2d.fillRect((getWidth() / 2) - (560) + ((turn+1)%2) * 600, (getHeight() / 2) - 260, 520, 520);
+        }
+        
+        
         //displays the grid
         displayBoardsGUI(g2d);
         
@@ -214,6 +227,17 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         for(int i = 0; i < buttons.length; ++i){
             g2d.drawImage(imagesToDraw[i], buttons[i][0], buttons[i][1], this);
         }
+        
+        //sets font styles
+        g2d.setColor(new Color(0,0,0));
+        g2d.setFont(new Font("TimesRoman", Font.ITALIC, 30));
+        //Smoothens the font - Credit to stackoverflow
+        g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
+        //draws the strings for opponent and you to know which board you should move on
+        g2d.drawString("You:", (getWidth() / 2) - (560) + (id-1) * 600, (getHeight() / 2) - 280);
+        g2d.drawString("Opponent:", (getWidth() / 2) - (560) + ((id)%2) * 600, (getHeight() / 2) - 280);
+
     }
     
     private int[][][][] getLocalMove(int boardX, int boardY, int boardNum){
