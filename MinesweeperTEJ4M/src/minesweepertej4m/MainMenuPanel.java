@@ -25,6 +25,9 @@ public class MainMenuPanel extends JPanel implements ActionListener, MouseMotion
     private int drawButtonSelection; //the button that should be drawn with a selection overlay
     private int drawButtonBorder; //the button that should be drawn with a border after a click
 
+    double widthScalar;
+    double heightScalar;
+
     /**
      * Constructor
      *
@@ -83,19 +86,19 @@ public class MainMenuPanel extends JPanel implements ActionListener, MouseMotion
 
             //check if any of the buttons were clicked
             //button x and y vars
-            int btnX = super.getWidth() / 2 - MAIN_MENU_REG[0].getWidth(null) / 2;
+            int btnX = super.getWidth() / 2 - ((int) (MAIN_MENU_REG[0].getWidth(null) / widthScalar) / 2);
             int btnY;
 
-            //loop through the 3 buttons
-            for (int i = 0; i < 3; i++) {
+            //loop through the 2 buttons
+            for (int i = 0; i < 2; i++) {
 
-                btnY = super.getHeight() / 2 + (MAIN_MENU_REG[0].getHeight(null) * i) + (10 * i);
+                btnY = super.getHeight() / 2 + ((int) (MAIN_MENU_REG[i].getHeight(null) / heightScalar) * i) + ((int) (10 / heightScalar) * i);
 
                 //check if the click was within any of the button hitboxes
                 if (event.getX() > btnX
                         && event.getY() > btnY
-                        && event.getX() < (btnX + MAIN_MENU_REG[0].getWidth(null))
-                        && event.getY() < (btnY + MAIN_MENU_REG[0].getHeight(null))) {
+                        && event.getX() < (btnX + (int) (MAIN_MENU_REG[i].getWidth(null) / widthScalar))
+                        && event.getY() < (btnY + (int) (MAIN_MENU_REG[i].getHeight(null) / heightScalar))) {
 
                     //if a mouse movemnt
                     if (eventType == 1) {
@@ -114,12 +117,12 @@ public class MainMenuPanel extends JPanel implements ActionListener, MouseMotion
                         //also select that button
                         drawButtonSelection = i;
                         drawButtonBorder = -1;
-                        
+
                         //preform the action that that button is reposible for
                         if (i == 0) { //create server
                             //hide this main menu
                             mainMenuFrameRef.setVisible(false);
-                            
+
                             //create a new game server creation Frame and show it
                             SweeperCreate creationFrame = new SweeperCreate(mainMenuFrameRef);
                             creationFrame.setLocationRelativeTo(null);
@@ -127,7 +130,7 @@ public class MainMenuPanel extends JPanel implements ActionListener, MouseMotion
                         } else if (i == 1) { //join game
                             //hide this main menu
                             mainMenuFrameRef.setVisible(false);
-                            
+
                             //create a new game server creation Frame and show it
                             SweeperJoin joinFrame = new SweeperJoin(mainMenuFrameRef);
                             joinFrame.setLocationRelativeTo(null);
@@ -147,11 +150,15 @@ public class MainMenuPanel extends JPanel implements ActionListener, MouseMotion
 
         Graphics2D g2d = (Graphics2D) g;
 
+        //vars
+        widthScalar = 1920.0 / mainMenuFrameRef.getWidth();
+        heightScalar = 1080.0 / mainMenuFrameRef.getHeight();
+
         //add the background image
-        g2d.drawImage(MAIN_MENU_BACKGROUND, 
-                0, 
-                0, 
-                mainMenuFrameRef.getWidth(),
+        g2d.drawImage(MAIN_MENU_BACKGROUND,
+                0,
+                0,
+                mainMenuFrameRef.getWidth(), //scale it to the same size as the Frame
                 mainMenuFrameRef.getHeight(),
                 null);
 
@@ -170,8 +177,11 @@ public class MainMenuPanel extends JPanel implements ActionListener, MouseMotion
             }
 
             g2d.drawImage(buttonImg[i],
-                    super.getWidth() / 2 - (buttonImg[i].getWidth(null) / 2),
-                    super.getHeight() / 2 + (buttonImg[i].getHeight(null) * i) + (10 * i), null);
+                    super.getWidth() / 2 - ((int) (buttonImg[i].getWidth(null) / widthScalar) / 2),
+                    super.getHeight() / 2 + ((int) (buttonImg[i].getHeight(null) / heightScalar) * i) + ((int) (10 / heightScalar) * i),
+                    (int) (buttonImg[i].getWidth(null) / widthScalar),
+                    (int) (buttonImg[i].getHeight(null) / heightScalar),
+                    null);
 
         }
     }

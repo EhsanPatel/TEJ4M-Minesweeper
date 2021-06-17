@@ -5,6 +5,7 @@
  */
 package minesweepertej4m;
 
+import java.awt.Dimension;
 import javax.swing.JFrame;
 import resources.ResourcesRef;
 
@@ -51,6 +52,7 @@ public class MainMenuFrame extends JFrame {
         theMainMenuPanel = new MainMenuPanel(this); //creates a new blank game
         add(theMainMenuPanel); //adds it to the JFrame
         setLocationRelativeTo(null);
+        setMinimumSize(new Dimension(800, 600));
         setResizable(true);
         setVisible(true);
     }
