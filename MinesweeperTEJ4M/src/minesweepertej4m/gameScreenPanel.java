@@ -45,7 +45,16 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     //board format [whos board][x][y][covered, is bomb, # surrounding, is flagged]
     private int[][][][] boards = new int[2][10][10][4];
     private String currentAction = "scout";
-    
+    private Color[] colors = {
+        new Color(29, 0, 255),
+        new Color(52, 126, 0),
+        new Color(234, 26, 0),
+        new Color(135, 66, 245),
+        new Color(117, 9, 0),
+        new Color(54, 126, 129),
+        new Color(0,0,0),
+        new Color(128, 128, 128)
+    };
     
     /**
      * Constructor for this panel to be drawn
@@ -353,7 +362,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                     
                     //displays a number if the square has been uncovered
                     if(boards[i][k][j][0] == 1 && boards[i][k][j][2] != 0){
-                        g2d.setColor(new Color(0, 0, 0));
+                        g2d.setColor(colors[boards[i][k][j][2]-1]);
                         g2d.setFont(new Font("TimesRoman", Font.PLAIN, 30));
                         g2d.drawString(""+boards[i][k][j][2],((getWidth()/2)-550) + (k*50) + (i*600)+17,(getHeight()/2)-250 + (j*50)+36);
                     }
