@@ -94,7 +94,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                 if(turn == 0){
 
                     //checks if the mouse was clicked on the first grid space
-                    if(firstGridHit(e.getX(),e.getY()) && ((id == 2 && currentAction.equals("bomb"))||(id == 1 && !currentAction.equals("bomb")))){
+                    if(firstGridHit(e.getX(),e.getY()) && ((id == 2 && currentAction.equals("bomb") && !player2FirstTurn)||(id == 1 && !currentAction.equals("bomb")))){
                         //get the mapped coordinates
                         int boardX = (e.getX() - ((getWidth()/2)-550))/50;
                         int boardY = (e.getY() - ((getHeight()/2)-250))/50;
@@ -111,7 +111,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                         }
 
                     //checks if the mouse was clicked on the second grid space
-                    }else if(secondGridHit(e.getX(),e.getY()) && ((id == 1 && currentAction.equals("bomb"))||(id == 2 && !currentAction.equals("bomb")))){
+                    }else if(secondGridHit(e.getX(),e.getY()) && ((id == 1 && currentAction.equals("bomb") && !player1FirstTurn)||(id == 2 && !currentAction.equals("bomb")))){
                         //get the mapped coordinates
                         int boardX = (e.getX() - ((getWidth()/2)+50))/50;
                         int boardY = (e.getY() - ((getHeight()/2)-250))/50;
