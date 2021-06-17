@@ -415,35 +415,34 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                             (int)(46 / widthScalar),
                             (int)(46 / heightScalar));
                     
-                    /*
-                    
                     //draws a flag on all the tiles that the user has selected to have a flag on
                     if(boards[i][k][j][3] == 1){
                         g2d.drawImage(GAME_FLAG,
-                                ((getWidth()/2)-550) + (k*50) + (i*600)+10,
-                                (getHeight()/2)-250 + (j*50)+5,
+                                ((getWidth()/2)-(int)(550 / widthScalar)) + (k*(int)(50 / widthScalar)) + (i*(int)(600 / widthScalar))+(int)(10 / widthScalar),
+                                (getHeight()/2)-(int)(250 / heightScalar) + (j*(int)(50 / heightScalar))+(int)(5 / heightScalar),
                                 (int)(31 / widthScalar),
                                 (int)(40 / heightScalar),
                                 this);
                     }
                     
-                    /*
                     //draws a bomb on all the tiles that the user has selected to have a bomb on
                     if(boards[i][k][j][1] == 1 && (showBombs ||  i == (turn+1)%2)){
                         g2d.drawImage(GAME_BOMB,
-                                ((getWidth()/2)-550) + (k*50) + (i*600)+2,
-                                (getHeight()/2)-250 + (j*50)+2,
-                                46,
-                                46,
+                                ((getWidth()/2)-(int)(550 / widthScalar)) + (k*(int)(50 / widthScalar)) + (i*(int)(600 / widthScalar))+(int)(2 / widthScalar),
+                                (getHeight()/2)-(int)(250 / heightScalar) + (j*(int)(50 / heightScalar))+(int)(2 / heightScalar),
+                                (int)(46 / widthScalar),
+                                (int)(46 / heightScalar),
                                 this);
                     }
                     
                     //displays a number if the square has been uncovered
                     if(boards[i][k][j][0] == 1 && boards[i][k][j][2] != 0){
                         g2d.setColor(colors[boards[i][k][j][2]-1]);
-                        g2d.setFont(new Font("TimesRoman", Font.PLAIN, 30));
-                        g2d.drawString(""+boards[i][k][j][2],((getWidth()/2)-550) + (k*50) + (i*600)+17,(getHeight()/2)-250 + (j*50)+36);
-                    }*/
+                        g2d.setFont(new Font("TimesRoman", Font.PLAIN, (int)(30 / heightScalar)));
+                        g2d.drawString(""+boards[i][k][j][2],
+                                ((getWidth()/2)-(int)(550 / widthScalar)) + (k*(int)(50 / widthScalar)) + (i*(int)(600 / widthScalar))+(int)(17 / widthScalar),
+                                (getHeight()/2)-(int)(250 / heightScalar) + (j*(int)(50 / heightScalar))+(int)(36 / heightScalar));
+                    }
 
                 }
             }
