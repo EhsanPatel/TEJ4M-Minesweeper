@@ -154,7 +154,7 @@ public class MainMenuPanel extends JPanel implements ActionListener, MouseMotion
         java.awt.Image[] buttonImg;
 
         //loop through the 3 buttons to draw them
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 2; i++) {
 
             if (drawButtonBorder == i) {
                 buttonImg = MAIN_MENU_CLICK;

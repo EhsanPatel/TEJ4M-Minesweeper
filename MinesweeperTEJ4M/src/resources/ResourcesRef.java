@@ -17,21 +17,18 @@ public class ResourcesRef {
     //background
     public final static Image MAIN_MENU_BACKGROUND = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/background.png")).getImage();
     //regular buttons
-    private final static Image MAIN_MENU_SETTINGS = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/settings.png")).getImage();
     private final static Image MAIN_MENU_CREATE = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/createGame.png")).getImage();
     private final static Image MAIN_MENU_JOIN = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/joinGame.png")).getImage();
     //hovered buttons
-    private final static Image MAIN_MENU_SETTINGS_HOVER = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/hoverSettings.png")).getImage();
     private final static Image MAIN_MENU_CREATE_HOVER = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/hoverCreate.png")).getImage();
     private final static Image MAIN_MENU_JOIN_HOVER = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/hoverJoin.png")).getImage();
     //bordered buttons
-    private final static Image MAIN_MENU_SETTINGS_BORDER = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/clickSettings.png")).getImage();
     private final static Image MAIN_MENU_CREATE_BORDER = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/clickCreate.png")).getImage();
     private final static Image MAIN_MENU_JOIN_BORDER = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/clickJoin.png")).getImage();
     
-    public final static Image[] MAIN_MENU_REG = new Image[]{MAIN_MENU_CREATE, MAIN_MENU_JOIN, MAIN_MENU_SETTINGS};
-    public final static Image[] MAIN_MENU_HOVER = new Image[]{MAIN_MENU_CREATE_HOVER, MAIN_MENU_JOIN_HOVER, MAIN_MENU_SETTINGS_HOVER};
-    public final static Image[] MAIN_MENU_CLICK = new Image[]{MAIN_MENU_CREATE_BORDER, MAIN_MENU_JOIN_BORDER, MAIN_MENU_SETTINGS_BORDER};
+    public final static Image[] MAIN_MENU_REG = new Image[]{MAIN_MENU_CREATE, MAIN_MENU_JOIN};
+    public final static Image[] MAIN_MENU_HOVER = new Image[]{MAIN_MENU_CREATE_HOVER, MAIN_MENU_JOIN_HOVER};
+    public final static Image[] MAIN_MENU_CLICK = new Image[]{MAIN_MENU_CREATE_BORDER, MAIN_MENU_JOIN_BORDER};
     
     
     //Game screen Resources
