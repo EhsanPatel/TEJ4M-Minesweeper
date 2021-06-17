@@ -106,7 +106,10 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                                 generateBoard(0,boardX,boardY);
                                 player1FirstTurn = false;
                             }
-                            revealTiles(boardX, boardY, 0);
+                            if(boards[1][boardX][boardY][3] == 0){
+                                revealTiles(boardX, boardY, 0);
+                            }
+                            
                             //send the updated board to the game server
                             sweeperClient.sendBoardToServer(boards);
                             isValid = false;
@@ -125,7 +128,10 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                                 generateBoard(1,boardX,boardY);
                                 player2FirstTurn = false;
                             }
-                            revealTiles(boardX, boardY, 1);
+                            if(boards[1][boardX][boardY][3] == 0){
+                                revealTiles(boardX, boardY, 1);
+                            }
+                            
                             //send the updated board to the game server
                             sweeperClient.sendBoardToServer(boards);
                             isValid = false;
@@ -294,7 +300,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     
     
     private void revealTiles(int boardX, int boardY, int boardNum){
-        if(currentAction.equals("scout") && boards[boardNum][boardX][boardY][3] == 0){
+        if(currentAction.equals("scout")){
             for (int i = -1; i < 2; i++) {
                 for (int j = -1; j < 2; j++) {
                     if(boardX+i >= 0 && boardX+i < 10 && boardY+j >= 0 && boardY+j < 10){
