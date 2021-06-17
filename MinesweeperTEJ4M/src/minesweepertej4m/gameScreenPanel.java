@@ -89,6 +89,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                             generateBoard(0,boardX,boardY);
                             player1FirstTurn = false;
                         }
+                        revealTiles(boardX, boardY, 0);
                         //send the updated board to the game server
                         sweeperClient.sendBoardToServer(boards); 
                         
@@ -104,6 +105,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                             generateBoard(1,boardX,boardY);
                             player2FirstTurn = false;
                         }
+                        revealTiles(boardX, boardY, 1);
                         //send the updated board to the game server
                         sweeperClient.sendBoardToServer(boards); 
                     }
@@ -240,6 +242,22 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     }
     
     
+    private void revealTiles(int boardX, int boardY, int boardNum){
+        for (int i = -1; i < 2; i++) {
+            for (int j = -1; j < 2; j++) {
+                if(boardX+i >= 0 && boardX+i < 10 && boardY+j >= 0 && boardY+j < 10){
+                    if(boards[boardNum][boardX][boardY][2] == 0 && boards[boardNum][boardX+i][boardY+j][2] == 0 && boards[boardNum][boardX+i][boardY+j][0] == 0 && !(i == 0 && j == 0)){
+                        boards[boardNum][boardX+i][boardY+j][0] = 1;
+                        revealTiles(boardX+i, boardY+j, boardNum);
+                    }else if(boards[boardNum][boardX][boardY][2] == 0){
+                        boards[boardNum][boardX+i][boardY+j][0] = 1;
+                    }
+                }
+            }
+        }
+    }
+    
+    
     private void updateNumbers(){
         for (int i = 0; i < boards.length; i++) {
             for (int j = 0; j < boards[i].length; j++) {
@@ -280,7 +298,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
             }
         }
         updateNumbers();
-        displayBoards(1);
+//        displayBoards(1);
     }
 
     /**
@@ -331,7 +349,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                     }
                     
                     //displays a number if the square has been uncovered
-                    if(boards[i][k][j][0] == 1){
+                    if(boards[i][k][j][0] == 1 && boards[i][k][j][2] != 0){
                         g2d.setColor(new Color(0, 0, 0));
                         g2d.setFont(new Font("TimesRoman", Font.PLAIN, 30));
                         g2d.drawString(""+boards[i][k][j][2],((getWidth()/2)-550) + (k*50) + (i*600)+17,(getHeight()/2)-250 + (j*50)+36);
