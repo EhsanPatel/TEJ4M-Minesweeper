@@ -148,7 +148,12 @@ public class MainMenuPanel extends JPanel implements ActionListener, MouseMotion
         Graphics2D g2d = (Graphics2D) g;
 
         //add the background image
-        g2d.drawImage(MAIN_MENU_BACKGROUND, 0, 0, null);
+        g2d.drawImage(MAIN_MENU_BACKGROUND, 
+                0, 
+                0, 
+                mainMenuFrameRef.getWidth(),
+                mainMenuFrameRef.getHeight(),
+                null);
 
         //create a new array to store the Image array for a given button
         java.awt.Image[] buttonImg;
