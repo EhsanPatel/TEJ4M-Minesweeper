@@ -41,6 +41,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     //game variables
     private int turn = 0;
     private int turnCounter = 0;
+    private boolean showBombs = true; //toggle to change bomb visibility
     //board format [whos board][x][y][covered, is bomb, # surrounding, is flagged]
     private int[][][][] boards = new int[2][10][10][4];
     private String currentAction = "scout";
@@ -216,6 +217,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                 boards[boardNum][boardX][boardY][0] = 1;
             }
             if(boards[boardNum][boardX][boardY][1] == 1){
+                showBombs = true;
                 System.out.println("Game over, you clicked on a bomb");
             }
         }else if(currentAction.equals("flag")){
@@ -343,8 +345,8 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                     if(boards[i][k][j][3] == 1){
                         g2d.drawImage(GAME_FLAG,((getWidth()/2)-550) + (k*50) + (i*600)+10,(getHeight()/2)-250 + (j*50)+5,this);
                     }
-                    //draws a bomb on all the tiles that the user has selected to have a flag on
-                    if(boards[i][k][j][1] == 1){
+                    //draws a bomb on all the tiles that the user has selected to have a bomb on
+                    if(boards[i][k][j][1] == 1 && (showBombs ||  i == (turn+1)%2)){
                         g2d.drawImage(GAME_BOMB,((getWidth()/2)-550) + (k*50) + (i*600)+2,(getHeight()/2)-250 + (j*50)+2,this);
                     }
                     
