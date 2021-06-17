@@ -33,12 +33,12 @@ public class ResourcesRef {
     
     //Game screen Resources
     public final static Image NAV_SETTINGS = new ImageIcon(ResourcesRef.class.getResource("images/navigation/settings.png")).getImage();
-    public final static Image NAV_SCOUT = new ImageIcon(ResourcesRef.class.getResource("images/navigation/scout_bomb.png")).getImage().getScaledInstance(80, 80, Image.SCALE_AREA_AVERAGING);
-    public final static Image NAV_FLAG = new ImageIcon(ResourcesRef.class.getResource("images/navigation/flag.png")).getImage().getScaledInstance(57, 80, Image.SCALE_AREA_AVERAGING);
-    public final static Image NAV_PLACE = new ImageIcon(ResourcesRef.class.getResource("images/navigation/place_bomb.png")).getImage().getScaledInstance(80, 80, Image.SCALE_AREA_AVERAGING);
-    public final static Image NAV_QUIT = new ImageIcon(ResourcesRef.class.getResource("images/navigation/quit.png")).getImage().getScaledInstance(296, 80, Image.SCALE_AREA_AVERAGING);
+    public final static Image NAV_SCOUT = new ImageIcon(ResourcesRef.class.getResource("images/navigation/scout_bomb.png")).getImage();
+    public final static Image NAV_FLAG = new ImageIcon(ResourcesRef.class.getResource("images/navigation/flag.png")).getImage();
+    public final static Image NAV_PLACE = new ImageIcon(ResourcesRef.class.getResource("images/navigation/place_bomb.png")).getImage();
+    public final static Image NAV_QUIT = new ImageIcon(ResourcesRef.class.getResource("images/navigation/quit.png")).getImage();
     
-    public final static Image GAME_FLAG = new ImageIcon(ResourcesRef.class.getResource("images/gamePanel/flag2.png")).getImage().getScaledInstance(31, 40, Image.SCALE_AREA_AVERAGING);
-    public final static Image GAME_BOMB = new ImageIcon(ResourcesRef.class.getResource("images/gamePanel/bomb.png")).getImage().getScaledInstance(46, 46, Image.SCALE_AREA_AVERAGING);
+    public final static Image GAME_FLAG = new ImageIcon(ResourcesRef.class.getResource("images/gamePanel/flag2.png")).getImage();
+    public final static Image GAME_BOMB = new ImageIcon(ResourcesRef.class.getResource("images/gamePanel/bomb.png")).getImage();
 
 }

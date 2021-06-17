@@ -59,6 +59,9 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
   
     private int id;
     
+    double widthScalar;
+    double heightScalar;
+    
     /**
      * Constructor for this panel to be drawn
      * @param m
@@ -164,15 +167,20 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         
         
         //outlines the grid of who's turn it is
-        g2d.setColor(new Color(0,0,0));
+        g2d.setColor(new Color(255,0,0));
         
         //which grid to outline is dependant on the id and the turn
         if(id == 1){
-            g2d.fillRect((getWidth() / 2) - (560) + turn * 600, (getHeight() / 2) - 260, 520, 520);
+            g2d.fillRect((getWidth() / 2) - ((int)(560 / widthScalar)) + (turn * (int)(600 / widthScalar)), 
+                    (getHeight() / 2) - (int)(260 / heightScalar), 
+                    (int)(516 / widthScalar),
+                    (int)(512 / heightScalar));
         }else{
-            g2d.fillRect((getWidth() / 2) - (560) + ((turn+1)%2) * 600, (getHeight() / 2) - 260, 520, 520);
+            g2d.fillRect((getWidth() / 2) - ((int)(560 / widthScalar)) + (((turn+1)%2) * (int)(600 / widthScalar)), 
+                    (getHeight() / 2) - (int)(260 / heightScalar), 
+                    (int)(516 / widthScalar), 
+                    (int)(512 / heightScalar));
         }
-        
         
         //displays the grid
         displayBoardsGUI(g2d);
@@ -193,7 +201,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
             x = buttons[1][0];
             y = buttons[1][1];
         }else if(currentAction.equals("flag")){
-            x = buttons[2][0]-10;
+            x = buttons[2][0]-(int)(10 / widthScalar);
             y = buttons[2][1];
         }else if(currentAction.equals("bomb")){
             x = buttons[3][0];
@@ -201,13 +209,20 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         }
         
         //draws the rectangle
-        g2d.drawRect(x-2,y-5,85,85);
+        g2d.drawRect(x-(int)(2 / widthScalar),
+                y-(int)(5 / heightScalar),
+                (int)(85 / widthScalar),
+                (int)(85 / heightScalar));
         //resets the stroke so the other items are not outlined
         g2d.setStroke(oldStroke);
         //draw boards on screen
     }
     
     private void drawStaticComponents(Graphics g) {
+        //values for scaling elements
+        widthScalar = 1920.0 / gameScreenFrameRef.getWidth();
+        heightScalar = 1080.0 / gameScreenFrameRef.getHeight();
+        
         //The graphics model to use
         Graphics2D g2d = (Graphics2D) g;
         //changes the drawing color to green
@@ -217,18 +232,17 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         //changes the color to white
         g2d.setColor(new Color(255,255,255));
         //draws the navigation bar
-        g2d.fillRect(0,getHeight()-100,getWidth(),100);
+        g2d.fillRect(0, (int) (getHeight()-(100.0 / heightScalar)),getWidth(), (int) (101.0 / heightScalar));
         
-        
-        //draws the grid background
-        g2d.fillRect((getWidth()/2)-(550),(getHeight()/2)-250,500,500);
-        g2d.fillRect((getWidth()/2)+50,(getHeight()/2)-250,500,500);
-        
-        //draws all the images for buttons to be used
-        
+        //draws all the images for buttons to be used        
         Image[] imagesToDraw = {NAV_SETTINGS, NAV_SCOUT, NAV_FLAG, NAV_PLACE, NAV_QUIT};
         for(int i = 0; i < buttons.length; ++i){
-            g2d.drawImage(imagesToDraw[i], buttons[i][0], buttons[i][1], this);
+            g2d.drawImage(imagesToDraw[i], 
+                    buttons[i][0], 
+                    buttons[i][1], 
+                    buttons[i][2], 
+                    buttons[i][3], 
+                    this);
         }
         
         //sets font styles
@@ -238,8 +252,12 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS,RenderingHints.VALUE_FRACTIONALMETRICS_ON);
         g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
         //draws the strings for opponent and you to know which board you should move on
-        g2d.drawString("You:", (getWidth() / 2) - (560) + (id-1) * 600, (getHeight() / 2) - 280);
-        g2d.drawString("Opponent:", (getWidth() / 2) - (560) + ((id)%2) * 600, (getHeight() / 2) - 280);
+        g2d.drawString("You:", 
+                (getWidth() / 2) - (int)(560 / widthScalar) + (id-1) * (int)(600 / widthScalar), 
+                (getHeight() / 2) - (int)(280 / heightScalar));
+        g2d.drawString("Opponent:", 
+                (getWidth() / 2) - (int)(560 / widthScalar) + ((id)%2) * (int)(600 / widthScalar), 
+                (getHeight() / 2) - (int)(280 / heightScalar));
 
     }
     
@@ -377,7 +395,11 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
             for (int j = 0; j < boards[i].length; j++) {
                 for (int k = 0; k < boards[i][j].length; k++) {
                     g2d.setColor(new Color(0,0,0));
-                    g2d.fillRect(((getWidth()/2)-550) + (k*50) + (i*600),(getHeight()/2)-250 + (j*50),50,50);
+                    g2d.fillRect((int)(((getWidth()/2)-(550 / widthScalar)) + (k*(int)(50 / widthScalar)) + (i*(600 / widthScalar))),
+                            (int)((getHeight()/2)-(250 / heightScalar) + (j*(int)(50 / heightScalar))),
+                            (int)(52 / widthScalar),
+                            (int)(51 / heightScalar));
+                    
                     
                     //draws a different color grid tile to mark covered and uncovered tiles
                     if(boards[i][k][j][0] == 0){
@@ -388,15 +410,32 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                         g2d.setColor(new Color(255, 255, 255));
                     }
                     //draws the tile using the color
-                    g2d.fillRect(((getWidth()/2)-550) + (k*50) + (i*600)+2,(getHeight()/2)-250 + (j*50)+2,46,46);
+                    g2d.fillRect(((getWidth()/2)-(int)(550 / widthScalar)) + (k*(int)(50 / widthScalar)) + (i*(int)(600 / widthScalar))+(int)(2 / widthScalar),
+                            (getHeight()/2)-(int)(250 / heightScalar) + (j*(int)(50 / heightScalar))+(int)(2 / heightScalar),
+                            (int)(46 / widthScalar),
+                            (int)(46 / heightScalar));
+                    
+                    /*
                     
                     //draws a flag on all the tiles that the user has selected to have a flag on
                     if(boards[i][k][j][3] == 1){
-                        g2d.drawImage(GAME_FLAG,((getWidth()/2)-550) + (k*50) + (i*600)+10,(getHeight()/2)-250 + (j*50)+5,this);
+                        g2d.drawImage(GAME_FLAG,
+                                ((getWidth()/2)-550) + (k*50) + (i*600)+10,
+                                (getHeight()/2)-250 + (j*50)+5,
+                                (int)(31 / widthScalar),
+                                (int)(40 / heightScalar),
+                                this);
                     }
+                    
+                    /*
                     //draws a bomb on all the tiles that the user has selected to have a bomb on
                     if(boards[i][k][j][1] == 1 && (showBombs ||  i == (turn+1)%2)){
-                        g2d.drawImage(GAME_BOMB,((getWidth()/2)-550) + (k*50) + (i*600)+2,(getHeight()/2)-250 + (j*50)+2,this);
+                        g2d.drawImage(GAME_BOMB,
+                                ((getWidth()/2)-550) + (k*50) + (i*600)+2,
+                                (getHeight()/2)-250 + (j*50)+2,
+                                46,
+                                46,
+                                this);
                     }
                     
                     //displays a number if the square has been uncovered
@@ -404,7 +443,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                         g2d.setColor(colors[boards[i][k][j][2]-1]);
                         g2d.setFont(new Font("TimesRoman", Font.PLAIN, 30));
                         g2d.drawString(""+boards[i][k][j][2],((getWidth()/2)-550) + (k*50) + (i*600)+17,(getHeight()/2)-250 + (j*50)+36);
-                    }
+                    }*/
 
                 }
             }
@@ -482,11 +521,26 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     public void paintComponent(Graphics g){
         //stores the coordinates of all the buttons
         buttons = new int[][]{
-            {0, getHeight()-90, 467, 85}, //Settings
-            {(getWidth()/2)-(NAV_SCOUT.getWidth(this)/2)-140, getHeight()-90, 80, 80}, //Scout
-            {(getWidth()/2)-(NAV_FLAG.getWidth(this)/2), getHeight()-90, 57, 80}, //Flag
-            {(getWidth()/2)-(NAV_PLACE.getWidth(this)/2)+140, getHeight()-90, 80, 80}, //Place
-            {getWidth()-320, getHeight()-90, 296, 80} //Quit
+            {0, 
+                getHeight()-(int)(90 / heightScalar), 
+                (int)(467 / widthScalar), 
+                (int)(85 / heightScalar)}, //Settings
+            {(getWidth()/2)-(  (int)(NAV_SCOUT.getWidth(this) / widthScalar)/2)- (int)(140 / widthScalar), 
+                getHeight()-(int)(90 / heightScalar), 
+                (int)(80 / widthScalar), 
+                (int)(80 / heightScalar)}, //Scout
+            {(getWidth()/2)-(int)((NAV_FLAG.getWidth(this) / widthScalar)/2),
+                getHeight()-(int)(90 / heightScalar), 
+                (int)(57 / widthScalar), 
+                (int)(80 / heightScalar)}, //Flag
+            {(int)((getWidth()/2)-((NAV_PLACE.getWidth(this) / widthScalar)/2)+(140 / widthScalar)), 
+                getHeight()-(int)(90 / heightScalar), 
+                (int)(80 / widthScalar), 
+                (int)(80 / heightScalar)}, //Place
+            {getWidth()-(int)(320 / widthScalar),
+                getHeight()-(int)(90 / heightScalar), 
+                (int)(296 / widthScalar), 
+                (int)(80 / heightScalar)} //Quit
         };
         
         super.paintComponent(g);  //prep the panel for drawing

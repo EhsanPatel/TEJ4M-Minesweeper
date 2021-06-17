@@ -5,6 +5,7 @@
  */
 package minesweepertej4m;
 
+import java.awt.Dimension;
 import javax.swing.JFrame;
 
 public class gameScreenFrame extends JFrame {
@@ -44,6 +45,7 @@ public class gameScreenFrame extends JFrame {
         theGameScreenPanel = new gameScreenPanel(this, sweeperClient); //creates a new blank game
         setTitle("Multiplayer MineSweeper");
         setExtendedState(JFrame.MAXIMIZED_BOTH); //Fullscreen
+        setMinimumSize(new Dimension(800, 600));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         add(theGameScreenPanel); //adds it to the JFrame
         setVisible(true);
