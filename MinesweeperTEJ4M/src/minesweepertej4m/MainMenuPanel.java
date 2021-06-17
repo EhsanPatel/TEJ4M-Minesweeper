@@ -150,7 +150,7 @@ public class MainMenuPanel extends JPanel implements ActionListener, MouseMotion
 
         Graphics2D g2d = (Graphics2D) g;
 
-        //vars
+        //get the scaling values
         widthScalar = 1920.0 / mainMenuFrameRef.getWidth();
         heightScalar = 1080.0 / mainMenuFrameRef.getHeight();
 
