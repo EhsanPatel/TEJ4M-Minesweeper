@@ -158,6 +158,18 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         //The graphics model to use
         Graphics2D g2d = (Graphics2D) g;
         
+        
+        //outlines the grid of who's turn it is
+        g2d.setColor(new Color(0, 26, 10));
+        
+        //which grid to outline is dependant on the id and the turn
+        if(id == 1){
+            g2d.fillRect((getWidth() / 2) - (560) + turn * 600, (getHeight() / 2) - 260, 520, 520);
+        }else{
+            g2d.fillRect((getWidth() / 2) - (560) + ((turn+1)%2) * 600, (getHeight() / 2) - 260, 520, 520);
+        }
+        
+        
         //displays the grid
         displayBoardsGUI(g2d);
         
