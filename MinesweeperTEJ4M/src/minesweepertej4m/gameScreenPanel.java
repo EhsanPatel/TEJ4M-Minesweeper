@@ -55,6 +55,8 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         new Color(0,0,0),
         new Color(128, 128, 128)
     };
+  
+    private int id;
     
     /**
      * Constructor for this panel to be drawn
@@ -71,6 +73,12 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         //recieves mouse motion input
         addMouseMotionListener(this);
         
+        //receive whos turn it is from the server here
+        id = sweeperClient.getClientID(); //still need to do something with this data
+        //change the if statement below to make sure that it is your turn and not other client
+        System.out.println(id);
+        turn = id - 1;
+        
         //allows the board to recieve input from mouseclicks
         addMouseListener(new MouseAdapter() {
             @Override
@@ -81,16 +89,11 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                 //checks if any of the buttons have been pressed to run an action
                 checkButtonHits(e.getX(),e.getY());
                 
-                
-                //receive whos turn it is from the server here
-                sweeperClient.getClientID(); //still need to do something with this data
-                //change the if statement below to make sure that it is your turn and not other client
-                
-                
                 //checks if it is the current players turn to make a move
                 if(turn == 0){
+
                     //checks if the mouse was clicked on the first grid space
-                    if(firstGridHit(e.getX(),e.getY())){
+                    if(firstGridHit(e.getX(),e.getY()) && ((id == 2 && currentAction.equals("bomb"))||(id == 1 && !currentAction.equals("bomb")))){
                         //get the mapped coordinates
                         int boardX = (e.getX() - ((getWidth()/2)-550))/50;
                         int boardY = (e.getY() - ((getHeight()/2)-250))/50;
@@ -106,7 +109,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                         
 
                     //checks if the mouse was clicked on the second grid space
-                    }else if(secondGridHit(e.getX(),e.getY())){
+                    }else if(secondGridHit(e.getX(),e.getY()) && ((id == 1 && currentAction.equals("bomb"))||(id == 2 && !currentAction.equals("bomb")))){
                         //get the mapped coordinates
                         int boardX = (e.getX() - ((getWidth()/2)+50))/50;
                         int boardY = (e.getY() - ((getHeight()/2)-250))/50;
@@ -121,9 +124,6 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                         sweeperClient.sendBoardToServer(boards); 
                     }
                 }
-                
-                //switches turn back: FOR DEBUGGING
-                turn = 0;
             }
 
         });
@@ -141,6 +141,9 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     public void networkUpdateBoards(int[][][][] ungodlyArray) {
         
         boards = ungodlyArray;
+        
+        //flips the turn
+        turn = (turn+1)%2;
         
         repaint();
         
@@ -290,6 +293,14 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     
     private void generateBoard(int boardNum, int startX, int startY){
         int bombCount = 0;
+        
+        for (int i = 0; i < boards[boardNum].length; ++i) {
+            for (int j = 0; j < boards[boardNum][i].length; ++j) {
+                if(boards[boardNum][i][j][1] == 1){
+                    return;
+                }
+            }
+        }
         
         Random rand = new Random();
         while(bombCount < 27){
