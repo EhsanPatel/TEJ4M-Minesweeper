@@ -24,6 +24,7 @@ public class SweeperCreate extends javax.swing.JFrame {
      */
     public SweeperCreate(MainMenuFrame m) {
         menuRef = m;
+        MainMenuFrame.setIcon(this);
         initComponents();
     }
 

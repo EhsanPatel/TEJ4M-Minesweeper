@@ -6,6 +6,7 @@
 package minesweepertej4m;
 
 import javax.swing.JFrame;
+import resources.ResourcesRef;
 
 /**
  *
@@ -18,7 +19,8 @@ public class MainMenuFrame extends JFrame {
     /**
      * Constructor
      */
-    public MainMenuFrame(){
+    public MainMenuFrame(){        
+        setIcon(this);
         initFrame();
     }
     
@@ -61,7 +63,12 @@ public class MainMenuFrame extends JFrame {
         MainMenuFrame mainMenuFrame = new MainMenuFrame();
         
     }
-
     
+    /**
+     * Set the icon for the JFRame
+     */
+    public static void setIcon(JFrame frame) {
+        frame.setIconImage(ResourcesRef.GAME_BOMB);
+    }
 
 }

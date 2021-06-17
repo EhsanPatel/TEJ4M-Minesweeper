@@ -25,6 +25,7 @@ public class gameScreenFrame extends JFrame {
      */
     public gameScreenFrame(Client c){
         sweeperClient = c;
+        MainMenuFrame.setIcon(this);
         initFrame();
     }
     
