@@ -99,8 +99,8 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                     //checks if the mouse was clicked on the first grid space
                     if(firstGridHit(e.getX(),e.getY()) && ((id == 2 && currentAction.equals("bomb"))||(id == 1 && !currentAction.equals("bomb")))){
                         //get the mapped coordinates
-                        int boardX = (e.getX() - ((getWidth()/2)-550))/50;
-                        int boardY = (e.getY() - ((getHeight()/2)-250))/50;
+                        int boardX = (e.getX() - ((getWidth()/2)-(int)(550 / widthScalar)))/(int)(50 / widthScalar);
+                        int boardY = (e.getY() - ((getHeight()/2)-(int)(250 / heightScalar)))/(int)(50 / heightScalar);
                         //update the board
                         boards = getLocalMove(boardX,boardY, 0);
                         if(player1FirstTurn){
@@ -116,8 +116,8 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                     //checks if the mouse was clicked on the second grid space
                     }else if(secondGridHit(e.getX(),e.getY()) && ((id == 1 && currentAction.equals("bomb"))||(id == 2 && !currentAction.equals("bomb")))){
                         //get the mapped coordinates
-                        int boardX = (e.getX() - ((getWidth()/2)+50))/50;
-                        int boardY = (e.getY() - ((getHeight()/2)-250))/50;
+                        int boardX = (e.getX() - ((getWidth()/2) +(int)(50 / widthScalar))) /(int)(50 / widthScalar);
+                        int boardY = (e.getY() - ((getHeight()/2)-(int)(250 / heightScalar)))/(int)(50 / heightScalar);
                         //update the board
                         boards = getLocalMove(boardX,boardY, 1);
                         if(player2FirstTurn){
@@ -497,7 +497,8 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
      * @return - if the mouse clicked in a space on the first grid
      */
     private boolean firstGridHit(int x, int y){
-        return (x > (getWidth()/2)-550 && x < (getWidth()/2)-50) && (y > (getHeight()/2)-250 && y < (getHeight()/2)+250);
+        return (x > (getWidth()/2)-(int)(550 / widthScalar) && x < (getWidth()/2)-(int)(50 / widthScalar))
+                && (y > (getHeight()/2)-(int)(250 / heightScalar) && y < (getHeight()/2)+(int)(250 / heightScalar));
     }
     
     
@@ -508,7 +509,8 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
      * @return - if the mouse clicked in a space on the second grid
      */
     private boolean secondGridHit(int x, int y){
-        return (x > (getWidth()/2)+50 && x < (getWidth()/2)+550) && (y > (getHeight()/2)-250 && y < (getHeight()/2)+250);
+        return (x > (getWidth()/2)+(int)(50 / widthScalar) && x < (getWidth()/2)+(int)(550 / widthScalar))
+                && (y > (getHeight()/2)-(int)(250 / heightScalar) && y < (getHeight()/2)+(int)(250 / heightScalar));
     }
     
     
