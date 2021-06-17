@@ -55,6 +55,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         new Color(0,0,0),
         new Color(128, 128, 128)
     };
+  
     private int id;
     
     /**

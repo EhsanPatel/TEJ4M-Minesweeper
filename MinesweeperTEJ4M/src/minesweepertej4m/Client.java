@@ -144,7 +144,7 @@ public class Client extends JFrame {
 
         buttonEnabled = false;
         updateButtons();
-        this.setVisible(true);
+        this.setVisible(false);
     }
     
     /**
