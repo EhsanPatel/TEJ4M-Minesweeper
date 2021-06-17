@@ -122,6 +122,7 @@ public class MainMenuPanel extends JPanel implements ActionListener, MouseMotion
                             
                             //create a new game server creation Frame and show it
                             SweeperCreate creationFrame = new SweeperCreate(mainMenuFrameRef);
+                            creationFrame.setLocationRelativeTo(null);
                             creationFrame.setVisible(true);
                         } else if (i == 1) { //join game
                             //hide this main menu
@@ -129,6 +130,7 @@ public class MainMenuPanel extends JPanel implements ActionListener, MouseMotion
                             
                             //create a new game server creation Frame and show it
                             SweeperJoin joinFrame = new SweeperJoin(mainMenuFrameRef);
+                            joinFrame.setLocationRelativeTo(null);
                             joinFrame.setVisible(true);
                         }
                     }
