@@ -41,7 +41,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     //game variables
     private int turn = 0;
     private int turnCounter = 0;
-    private boolean showBombs = true; //toggle to change bomb visibility
+    private boolean showBombs = false; //toggle to change bomb visibility
     private static boolean player1FirstTurn = true;
     private static boolean player2FirstTurn = true;
     private boolean isValid = false;
@@ -512,7 +512,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                     }
                     
                     //draws a bomb on all the tiles that the user has selected to have a bomb on
-                    if(boards[i][k][j][1] == 1 && (showBombs ||  i == (turn+1)%2)){
+                    if(boards[i][k][j][1] == 1 && ((i == id - 1 && showBombs) || (i != id - 1))){
                         g2d.drawImage(GAME_BOMB,
                                 ((getWidth()/2)-(int)(550 / widthScalar)) + (k*(int)(50 / widthScalar)) + (i*(int)(600 / widthScalar))+(int)(2 / widthScalar),
                                 (getHeight()/2)-(int)(250 / heightScalar) + (j*(int)(50 / heightScalar))+(int)(2 / heightScalar),
