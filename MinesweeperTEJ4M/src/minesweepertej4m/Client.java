@@ -47,7 +47,7 @@ public class Client extends JFrame {
     private String destIp; //the IP of the destination server
     private int portNumber; //the port the server will be listening on
     
-    private gameScreenFrame gameScreenFrame;
+    private GameScreenFrame gameScreenFrame;
 
     private ClientSideConnection csc; //the socket type var to hold the connection for this Client
 
@@ -148,10 +148,10 @@ public class Client extends JFrame {
     }
     
     /**
-     * Mutator for the gameScreenFrame attribute
+     * Mutator for the GameScreenFrame attribute
      * @param gameScreenFrame 
      */
-    public void setGameScreenFrame(gameScreenFrame gameScreenFrame){
+    public void setGameScreenFrame(GameScreenFrame gameScreenFrame){
         this.gameScreenFrame = gameScreenFrame;
     }
     
