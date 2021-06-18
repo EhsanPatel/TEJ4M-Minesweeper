@@ -10,11 +10,15 @@ package minesweepertej4m;
  * @author Tacitor
  */
 public class GameInstructions extends javax.swing.JFrame {
+    
+    MainMenuFrame mainFrameRef;
 
     /**
      * Creates new form gameInstructions
      */
-    public GameInstructions() {
+    public GameInstructions(MainMenuFrame m) {
+        mainFrameRef = m;
+        MainMenuFrame.setIcon(this);
         initComponents();
     }
 
@@ -27,23 +31,96 @@ public class GameInstructions extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        mainPanel = new javax.swing.JPanel();
+        titleLbl = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        mainTxtArea = new javax.swing.JTextArea();
+        backBtn = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Multiplayer MineSweeper");
         setBackground(new java.awt.Color(88, 165, 100));
+        setForeground(new java.awt.Color(80, 165, 100));
+
+        mainPanel.setBackground(new java.awt.Color(88, 165, 100));
+        mainPanel.setForeground(new java.awt.Color(88, 165, 100));
+
+        titleLbl.setFont(new java.awt.Font("Yu Gothic", 0, 48)); // NOI18N
+        titleLbl.setForeground(new java.awt.Color(255, 255, 225));
+        titleLbl.setText("Multiplayer MineSweeper Instructions and Information");
+
+        mainTxtArea.setBackground(new java.awt.Color(88, 165, 100));
+        mainTxtArea.setColumns(20);
+        mainTxtArea.setFont(new java.awt.Font("Monospaced", 0, 18)); // NOI18N
+        mainTxtArea.setLineWrap(true);
+        mainTxtArea.setRows(5);
+        mainTxtArea.setText("Hello Test");
+        mainTxtArea.setWrapStyleWord(true);
+        mainTxtArea.setAutoscrolls(false);
+        mainTxtArea.setDisabledTextColor(new java.awt.Color(50, 50, 50));
+        mainTxtArea.setEnabled(false);
+        jScrollPane1.setViewportView(mainTxtArea);
+
+        backBtn.setText("< Back");
+        backBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backBtnActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
+        mainPanel.setLayout(mainPanelLayout);
+        mainPanelLayout.setHorizontalGroup(
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mainPanelLayout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(backBtn)
+                    .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(titleLbl)))
+                .addContainerGap(30, Short.MAX_VALUE))
+        );
+        mainPanelLayout.setVerticalGroup(
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mainPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(titleLbl)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 644, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(backBtn)
+                .addContainerGap(14, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
+        // TODO add your handling code here:
+        //hide this window
+        this.setVisible(false);
+        //show the main menu again
+        mainFrameRef.setVisible(true);
+        
+    }//GEN-LAST:event_backBtnActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backBtn;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel mainPanel;
+    private javax.swing.JTextArea mainTxtArea;
+    private javax.swing.JLabel titleLbl;
     // End of variables declaration//GEN-END:variables
 }

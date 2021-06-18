@@ -147,7 +147,7 @@ public class MainMenuPanel extends JPanel implements ActionListener, MouseMotion
                                 mainMenuFrameRef.setVisible(false);
                                 
                                 //create a new instruction window to show
-                                instructions = new GameInstructions();
+                                instructions = new GameInstructions(mainMenuFrameRef);
                                 instructions.setLocationRelativeTo(null);
                                 instructions.setVisible(true);
                                 break;
