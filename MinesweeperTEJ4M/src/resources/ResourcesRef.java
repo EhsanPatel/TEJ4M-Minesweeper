@@ -32,7 +32,7 @@ public class ResourcesRef {
     
     
     //Game screen Resources
-    public final static Image NAV_SETTINGS = new ImageIcon(ResourcesRef.class.getResource("images/navigation/settings.png")).getImage();
+    public final static Image NAV_RESTART = new ImageIcon(ResourcesRef.class.getResource("images/navigation/restart.png")).getImage();
     public final static Image NAV_SCOUT = new ImageIcon(ResourcesRef.class.getResource("images/navigation/scout_bomb.png")).getImage();
     public final static Image NAV_FLAG = new ImageIcon(ResourcesRef.class.getResource("images/navigation/flag.png")).getImage();
     public final static Image NAV_PLACE = new ImageIcon(ResourcesRef.class.getResource("images/navigation/place_bomb.png")).getImage();
