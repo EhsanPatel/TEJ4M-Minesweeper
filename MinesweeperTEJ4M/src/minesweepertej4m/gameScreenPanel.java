@@ -21,14 +21,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -355,7 +352,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         //completes a different move for each action
         if(currentAction.equals("scout")){
             //checks to make sure there is no flag on the tile to be scouted
-            if(boards[boardNum][boardX][boardY][3] == 0){
+            if(boards[boardNum][boardX][boardY][3] == 0 && boards[boardNum][boardX][boardY][0] == 0){
                 //uncovers the tile
                 boards[boardNum][boardX][boardY][0] = 1;
                 isValid = true;
