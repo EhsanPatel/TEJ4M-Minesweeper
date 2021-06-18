@@ -168,9 +168,14 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         
         boards = ungodlyArray;
         checkForWins();
-        
+
         //flips the turn
         turn = (turn+1)%2;
+        
+        if(checkForRestart(ungodlyArray)){
+            restartGame();
+        }
+        
         
         repaint();
         
@@ -205,7 +210,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         //displays the grid
         displayBoardsGUI(g2d);
         
-        //setts the color to black to draw the outline
+        //sets the color to black to draw the outline
         g2d.setColor(new Color(0,0,0));
 
         //highlights the current action
@@ -261,7 +266,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         g2d.fillRect(0, (int) (getHeight()-(100.0 / heightScalar)),getWidth(), (int) (101.0 / heightScalar));
         
         //draws all the images for buttons to be used        
-        Image[] imagesToDraw = {NAV_SETTINGS, NAV_SCOUT, NAV_FLAG, NAV_PLACE, NAV_QUIT};
+        Image[] imagesToDraw = {NAV_RESTART, NAV_SCOUT, NAV_FLAG, NAV_PLACE, NAV_QUIT};
         for(int i = 0; i < buttons.length; ++i){
             g2d.drawImage(imagesToDraw[i], 
                     buttons[i][0], 
@@ -572,7 +577,14 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         //executes a different action based on the button clicked
         switch(buttonHit){
             case 0:
-                System.out.println("Settings");
+                System.out.println("Restart");
+                int[][][][] restartCode = new int[2][10][10][4];
+                restartCode[0][0][0][1] = 1;
+                restartCode[1][0][0][1] = 1;
+                
+                sweeperClient.sendBoardToServer(restartCode);
+                restartGame();
+                
                 break;
             case 1:
                 currentAction = "scout";
@@ -623,7 +635,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
             {0, 
                 getHeight()-(int)(90 / heightScalar), 
                 (int)(467 / widthScalar), 
-                (int)(85 / heightScalar)}, //Settings
+                (int)(85 / heightScalar)}, //Restart
             {(getWidth()/2)-(  (int)(NAV_SCOUT.getWidth(this) / widthScalar)/2)- (int)(140 / widthScalar), 
                 getHeight()-(int)(90 / heightScalar), 
                 (int)(80 / widthScalar), 
@@ -648,6 +660,50 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         //synchronizes the graphics
         Toolkit.getDefaultToolkit().sync();
     }
+    
+    
+    private boolean checkForRestart(int[][][][] potentialBoard){
+        if(potentialBoard[0][0][0][1] != 1 || potentialBoard[1][0][0][1] != 1){
+            return false;
+        }
+
+        for (int i = 0; i < potentialBoard.length; i++) {
+            for (int j = 0; j < potentialBoard[i].length; j++) {
+                for (int k = 0; k < potentialBoard[i][j].length; k++) {
+                    if(!(k == 0 && j == 0)){
+                        if(!(potentialBoard[i][k][j][0] == 0
+                            && potentialBoard[i][k][j][1] == 0
+                            && potentialBoard[i][k][j][2] == 0
+                            && potentialBoard[i][k][j][3] == 0
+                            )){
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return true;
+    }
+    
+    
+    private void restartGame(){
+        System.out.println("Restarting Game");
+        turn = id - 1;
+        turnCounter = 0;
+        showBombs = false;
+        player1FirstTurn = true;
+        player2FirstTurn = true;
+        isValid = false;
+        gameOver = false;
+        winner = 0;
+        boards = new int[2][10][10][4];
+        currentAction = "scout";
+    }
+    
+    
+    
+    
     
     /**
      * updates the frame each loop
