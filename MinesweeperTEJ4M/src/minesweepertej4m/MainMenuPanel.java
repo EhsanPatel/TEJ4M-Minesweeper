@@ -1,7 +1,7 @@
 /*
  * Lukas Krampitz
  * Jun 14, 2021
- * 
+ * The actual content displayed on the JFrame
  */
 package minesweepertej4m;
 

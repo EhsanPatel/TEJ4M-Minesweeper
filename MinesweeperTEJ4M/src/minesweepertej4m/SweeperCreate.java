@@ -1,7 +1,7 @@
 /*
  * Lukas Krampitz
  * Jun 15, 2021
- * 
+ * A Basic GUI used to create a new game of Multiplayer Minesweeper
  */
 package minesweepertej4m;
 

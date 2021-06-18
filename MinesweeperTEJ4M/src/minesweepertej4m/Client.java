@@ -1,7 +1,7 @@
 /*
  * Lukas Krampitz
  * Mar 27, 2021
- * 
+ * A class concerned with the sending and recieving of data from a Server
  */
 package minesweepertej4m;
 
@@ -176,7 +176,7 @@ public class Client extends JFrame {
     public void sendBoardToServer(int[][][][] boards) {
 
         //debug the calling of this method
-        System.out.println("doing the serialization thing");
+        //System.out.println("doing the serialization thing");
 
         //setup a destination for the serialized boards
         String serializedFileDest = System.getProperty("user.home")
@@ -205,7 +205,7 @@ public class Client extends JFrame {
             out.close();
             file.close();
 
-            System.out.println("Serialization complete");
+            //System.out.println("Serialization complete");
             
         } catch (IOException ex) {
             System.out.println("[Client #" + clientID + "] IOException in sendBoardToServer()\n" + ex);
@@ -372,7 +372,7 @@ public class Client extends JFrame {
                         fos.close();
 
                         //deserialize the data
-                        System.out.println("Starting deserialization");
+                        //System.out.println("Starting deserialization");
                         try {
                             //read if the object from the file
                             FileInputStream file = new FileInputStream(saveToPath + File.separator + fileName);
@@ -384,7 +384,7 @@ public class Client extends JFrame {
                             in.close();
                             file.close();
 
-                            System.out.println("Deserialization Complete");
+                            //System.out.println("Deserialization Complete");
                             
                             //method call to gameScreen
                             gameScreenFrame.getGameScreenPanel().networkUpdateBoards(receiveArray);
@@ -529,7 +529,8 @@ public class Client extends JFrame {
                 int count = 0;
                 while (count < file.length) {
                     int bytesRead = dataIn.read(file, count, file.length - count);
-                    System.out.println("[Client " + clientID + "] " + "bytesRead: " + bytesRead);
+                    //debug the incomming data
+                    //System.out.println("[Client " + clientID + "] " + "bytesRead: " + bytesRead);
                     if (bytesRead == -1) {
                         System.out.println("[Client " + clientID + "] " + "didn't get a complete file");
                     }

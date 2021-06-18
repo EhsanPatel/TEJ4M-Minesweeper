@@ -1,7 +1,7 @@
 /*
  * Lukas Krampitz
  * Mar 27, 2021
- * 
+ * A SocketServer that interfaces with 2 clients to send and recieve data about the MineSeeperBoard
  */
 package minesweepertej4m;
 
@@ -201,7 +201,8 @@ public class Server {
                         while (count < fileLength) { //do it in steps as the packets of data cannot reach the buffer instantly with large files
                             //read in the portion that has not been read yet
                             int bytesRead = dataIn.read(fileAsStream, count, fileAsStream.length - count);
-                            System.out.println("[Server] " + "bytesRead: " + bytesRead);
+                            //debug incomming data
+                            //System.out.println("[Server] " + "bytesRead: " + bytesRead);
                             if (bytesRead == -1) {
                                 System.out.println("[Server] " + "didn't get a complete file");
                             }

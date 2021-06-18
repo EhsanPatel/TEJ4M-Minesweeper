@@ -28,7 +28,7 @@ public class ResourcesRef {
     private final static Image MAIN_MENU_CREATE_BORDER = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/clickCreate.png")).getImage();
     private final static Image MAIN_MENU_JOIN_BORDER = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/clickJoin.png")).getImage();
     private final static Image MAIN_MENU_INST_BORDER = new ImageIcon(ResourcesRef.class.getResource("images/MainMenu/clickInst.png")).getImage();
-    
+    //arrays for images on the main menu
     public final static Image[] MAIN_MENU_REG = new Image[]{MAIN_MENU_CREATE, MAIN_MENU_JOIN, MAIN_MENU_INST};
     public final static Image[] MAIN_MENU_HOVER = new Image[]{MAIN_MENU_CREATE_HOVER, MAIN_MENU_JOIN_HOVER, MAIN_MENU_INST_HOVER};
     public final static Image[] MAIN_MENU_CLICK = new Image[]{MAIN_MENU_CREATE_BORDER, MAIN_MENU_JOIN_BORDER, MAIN_MENU_INST_BORDER};
@@ -41,6 +41,7 @@ public class ResourcesRef {
     public final static Image NAV_PLACE = new ImageIcon(ResourcesRef.class.getResource("images/navigation/place_bomb.png")).getImage();
     public final static Image NAV_QUIT = new ImageIcon(ResourcesRef.class.getResource("images/navigation/quit.png")).getImage();
     
+    //Icons for elemnts on the dynamic board
     public final static Image GAME_FLAG = new ImageIcon(ResourcesRef.class.getResource("images/gamePanel/flag2.png")).getImage();
     public final static Image GAME_BOMB = new ImageIcon(ResourcesRef.class.getResource("images/gamePanel/bomb.png")).getImage();
 
