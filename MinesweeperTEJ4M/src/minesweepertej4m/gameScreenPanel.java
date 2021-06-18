@@ -19,7 +19,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -34,21 +33,26 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.InputStream;
 import resources.ResourcesRef;
 
+//custom import for image and sound resources
 import static resources.ResourcesRef.*;
 
-public class gameScreenPanel extends JPanel implements ActionListener, MouseMotionListener {
-    //the parent frame
+/**
+ * The panel which holds all the game action and display which goes on the JFrame
+ */
+public class gameScreenPanel extends JPanel implements ActionListener {
+    //The parent frame that the panel is on
     private gameScreenFrame gameScreenFrameRef;
     
-    //the client from the parent Frame and also for this Panel
+    //The client from the parent Frame and also for this Panel
     private Client sweeperClient;
     
-    //panel variables
+    //Panel Variables
     private static int[][] buttons;
+    private Timer timer; //updates on panel
+    double widthScalar; //scaling widths
+    double heightScalar; //scaling heights
     
-    private Timer timer;
-
-    //game variables
+    //Game Variables
     private int turn = 0;
     private int turnCounter = 0;
     private boolean showBombs = false; //toggle to change bomb visibility
@@ -57,10 +61,12 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     private boolean isValid = false;
     private boolean gameOver = false;
     private int winner = 0;
-    
-    //board format [whos board][x][y][covered, is bomb, # surrounding, is flagged]
-    private int[][][][] boards = new int[2][10][10][4];
     private String currentAction = "scout";
+
+    //Board format [whos board][x][y][covered, is bomb, # surrounding, is flagged]
+    private int[][][][] boards = new int[2][10][10][4];
+    
+    //Colors for the numbers to indicate the bombs surrounding
     private Color[] colors = {
         new Color(29, 0, 255),
         new Color(52, 126, 0),
@@ -72,18 +78,15 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         new Color(128, 128, 128)
     };
   
-    private int id;
-    
-    double widthScalar;
-    double heightScalar;
-    
+    //Network Variables
+    private int id; //client number that distinguishs it from the other connection
     private boolean waitsForBothPlayers = true; //If this is the first client does it wait for the server to send the start up command before it accepts grid hits
     private boolean hasRecievedStartup; //whether or not this client has gotten the startup command from the server
     
     /**
      * Constructor for this panel to be drawn
-     * @param m
-     * @param sweeperClient
+     * @param m - the parent frame
+     * @param sweeperClient - the network connection handling class
      */
     public gameScreenPanel(gameScreenFrame m, Client sweeperClient) {
         //stores the parent frame passed in
@@ -92,23 +95,21 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         //store the Client
         this.sweeperClient = sweeperClient;
         
-        //recieves mouse motion input
-        addMouseMotionListener(this);
-        
         //the client has not yet recieved the start up command
         hasRecievedStartup = false;
         
         //receive whos turn it is from the server here
         id = sweeperClient.getClientID(); //still need to do something with this data
+        
         //change the if statement below to make sure that it is your turn and not other client
-        System.out.println(id);
         turn = id - 1;
         
         //allows the board to recieve input from mouseclicks
         addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
+            /**
+             * handles the mouse clicks to perform different actions
+             * @param e - the mouse click event
+             */
             @Override
             public void mouseReleased(MouseEvent e) {
                 //checks if any of the buttons have been pressed to run an action
@@ -126,22 +127,31 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                             //get the mapped coordinates
                             int boardX = (e.getX() - ((getWidth()/2)-(int)(550 / widthScalar)))/(int)(50 / widthScalar);
                             int boardY = (e.getY() - ((getHeight()/2)-(int)(250 / heightScalar)))/(int)(50 / heightScalar);
+                            
                             //update the board
                             boards = getLocalMove(boardX,boardY, 0);
+                            //check if anyone has won the game
                             checkForWins();
 
                             //checks if the move is valid
                             if(isValid){
+                                
+                                //bombs should only generate on the first move that the player makes on their screen
                                 if(player1FirstTurn){
                                     generateBoard(0,boardX,boardY);
                                     player1FirstTurn = false;
                                 }
+                                
+                                //if the user clicks on a space with 0 mines surrounding, open up nearby tiles
                                 if(boards[1][boardX][boardY][3] == 0){
+                                    //opens recursively so that multiple nearby tiles with 0 bombs are also opened up
                                     revealTiles(boardX, boardY, 0);
                                 }
 
                                 //send the updated board to the game server
                                 sweeperClient.sendBoardToServer(boards);
+                                
+                                //resets the move validity to be used again for next turn
                                 isValid = false;
                             }
 
@@ -150,22 +160,31 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                             //get the mapped coordinates
                             int boardX = (e.getX() - ((getWidth()/2) +(int)(50 / widthScalar))) /(int)(50 / widthScalar);
                             int boardY = (e.getY() - ((getHeight()/2)-(int)(250 / heightScalar)))/(int)(50 / heightScalar);
+                            
                             //update the board
                             boards = getLocalMove(boardX,boardY, 1);
+                            //check if anyone has won the game
                             checkForWins();
 
                             //checks if the move is valid
                             if(isValid){
+                                
+                                //bombs should only generate on the first move that the player makes on their screen
                                 if(player2FirstTurn){
                                     generateBoard(1,boardX,boardY);
                                     player2FirstTurn = false;
                                 }
+                                
+                                //if the user clicks on a space with 0 mines surrounding, open up nearby tiles
                                 if(boards[1][boardX][boardY][3] == 0){
+                                    //opens recursively so that multiple nearby tiles with 0 bombs are also opened up
                                     revealTiles(boardX, boardY, 1);
                                 }
 
                                 //send the updated board to the game server
                                 sweeperClient.sendBoardToServer(boards);
+                                
+                                //resets the move validity to be used again for next turn
                                 isValid = false;
                             }
                         }
@@ -183,11 +202,13 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     
     /**
      * Update the game boards based of the array received by the network
-     * @param ungodlyArray 
+     * @param receivedArray - the array received by the network connection from the other client
      */
-    public void networkUpdateBoards(int[][][][] ungodlyArray) {
+    public void networkUpdateBoards(int[][][][] receivedArray) {
         
-        boards = ungodlyArray;
+        //update the board on this clients end
+        boards = receivedArray;
+        //check if there was a win
         checkForWins();
 
         //flips the turn
@@ -196,11 +217,13 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         //play the turn chime shound
         playTurnBeep();
       
-        if(checkForRestart(ungodlyArray)){
+        //checks for the restart code being received by the board
+        if(checkForRestart(receivedArray)){
+            //restarts the game on this clients end
             restartGame();
         }
         
-        
+        //update the screen
         repaint();
         
     }
@@ -252,7 +275,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         int x = 0;
         int y = 0;
 
-        //changes the coordinates based on the action being performed
+        //changes the coordinates of the highlight square based on the action being performed
         if(currentAction.equals("scout")){
             x = buttons[1][0];
             y = buttons[1][1];
@@ -271,14 +294,13 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                 (int)(85 / heightScalar));
         //resets the stroke so the other items are not outlined
         g2d.setStroke(oldStroke);
-        //draw boards on screen
     }
     
     
     
     /**
      * draws the components that do not move on the screen
-     * @param g 
+     * @param g - the graphics object to use for drawing
      */
     private void drawStaticComponents(Graphics g) {
         //values for scaling elements
@@ -355,6 +377,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
             if(boards[boardNum][boardX][boardY][3] == 0 && boards[boardNum][boardX][boardY][0] == 0){
                 //uncovers the tile
                 boards[boardNum][boardX][boardY][0] = 1;
+                //recognizes this move can be sent because it is valid
                 isValid = true;
                 //switches turn: may need to move into specific actions to be flag at any time
                 turn = (turn + 1) % 2;
@@ -369,7 +392,9 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         }else if(currentAction.equals("bomb")){
             //places a bomb
             if(boards[boardNum][boardX][boardY][0] == 0 && boards[boardNum][boardX][boardY][1] != 1){
+                //places a bomb by changing the property at that point in the array
                 boards[boardNum][boardX][boardY][1] = 1;
+                //recognizes this move can be sent because it is valid
                 isValid = true;
                 //switches turn: may need to move into specific actions to be flag at any time
                 turn = (turn + 1) % 2;
@@ -379,6 +404,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         //corrects the numbers displaying the number of bombs surrounding a tile
         updateNumbers();
         
+        //provide an updated board
         return boards;
     }
     
@@ -492,12 +518,17 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     }
 
     
+    /**
+     * Checks to see if either person has won the game yet
+     */
     private void checkForWins(){
         //loops through all the tiles on the board
         for (int i = 0; i < boards.length; i++) {
             
+            //stores if all the uncovered squares are cleared
             boolean allCleared = true;
             
+            //loops through the board
             for (int j = 0; j < boards[i].length; j++) {
                 for (int k = 0; k < boards[i][j].length; k++) {
                     //loss is when an uncovered tile and bomb exist together
@@ -506,12 +537,14 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                         gameOver = true;
                         winner = i;
                     }
+                    //checks if there is no bomb but the tile is covered
                     if(boards[i][k][j][1] == 0 && boards[i][k][j][0] == 0){
                         allCleared = false;
                     }
                 }
             }
-            //win is when all bombs
+            
+            //win is when all bombs are cleared and the previous tests are passed
             if(allCleared){
                 showBombs = true;
                 gameOver = true;
@@ -526,10 +559,12 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
      * @param g2d - the drawing object to use to create the shapes and images
      */
     private void displayBoardsGUI(Graphics2D g2d){
-        //board format [whos board][x][y][covered, is bomb, # surrounding, is flagged]
+        //board is looped through
         for (int i = 0; i < boards.length; i++) {
             for (int j = 0; j < boards[i].length; j++) {
                 for (int k = 0; k < boards[i][j].length; k++) {
+                    
+                    //draws a black outline around each tile for a border and grid like appearance
                     g2d.setColor(new Color(0,0,0));
                     g2d.fillRect((int)(((getWidth()/2)-(550 / widthScalar)) + (k*(int)(50 / widthScalar)) + (i*(600 / widthScalar))),
                             (int)((getHeight()/2)-(250 / heightScalar) + (j*(int)(50 / heightScalar))),
@@ -537,14 +572,19 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                             (int)(51 / heightScalar));
                     
                     
-                    //draws a different color grid tile to mark covered and uncovered tiles
+                    //selects a different color grid tile to mark covered and uncovered tiles
+                    
+                    //GREY if covered
                     if(boards[i][k][j][0] == 0){
                         g2d.setColor(new Color(55, 57, 63));
+                    //RED if bomb is uncovered
                     }else if(boards[i][k][j][0] == 1 && boards[i][k][j][1] == 1){
                         g2d.setColor(new Color(255, 57, 63));
+                    //WHITE if uncovered
                     }else{
                         g2d.setColor(new Color(255, 255, 255));
                     }
+                    
                     //draws the tile using the color
                     g2d.fillRect(((getWidth()/2)-(int)(550 / widthScalar)) + (k*(int)(50 / widthScalar)) + (i*(int)(600 / widthScalar))+(int)(2 / widthScalar),
                             (getHeight()/2)-(int)(250 / heightScalar) + (j*(int)(50 / heightScalar))+(int)(2 / heightScalar),
@@ -607,26 +647,30 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
 
         //executes a different action based on the button clicked
         switch(buttonHit){
-            case 0:
-                System.out.println("Restart");
+            case 0: //Each button is a different case number
+                
+                //the code to send to the board to signify a restart is called
                 int[][][][] restartCode = new int[2][10][10][4];
+                //makes two tiles bombs which is impossible for players to recreate or be generated
                 restartCode[0][0][0][1] = 1;
                 restartCode[1][0][0][1] = 1;
                 
+                //sends the code to the other board
                 sweeperClient.sendBoardToServer(restartCode);
+                //restarts on this board
                 restartGame();
-                
-                break;
+                break; //All cases exit so that they are the only one that is run
             case 1:
-                currentAction = "scout";
+                currentAction = "scout"; //switches the action that the player intends on making
                 break;
             case 2:
-                currentAction = "flag";
+                currentAction = "flag"; //switches the action that the player intends on making
                 break;
             case 3:
-                currentAction = "bomb";
+                currentAction = "bomb"; //switches the action that the player intends on making
                 break;
             case 4:
+                //exits out of the program
                 System.exit(0);
         }            
     }
@@ -638,6 +682,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
      * @return - if the mouse clicked in a space on the first grid
      */
     private boolean firstGridHit(int x, int y){
+        //checks if the x coordinate is within the grid area
         return (x > (getWidth()/2)-(int)(550 / widthScalar) && x < (getWidth()/2)-(int)(50 / widthScalar))
                 && (y > (getHeight()/2)-(int)(250 / heightScalar) && y < (getHeight()/2)+(int)(250 / heightScalar));
     }
@@ -650,6 +695,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
      * @return - if the mouse clicked in a space on the second grid
      */
     private boolean secondGridHit(int x, int y){
+        //checks if the x coordinate is within the grid area
         return (x > (getWidth()/2)+(int)(50 / widthScalar) && x < (getWidth()/2)+(int)(550 / widthScalar))
                 && (y > (getHeight()/2)-(int)(250 / heightScalar) && y < (getHeight()/2)+(int)(250 / heightScalar));
     }
@@ -661,7 +707,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
      */
     @Override
     public void paintComponent(Graphics g){
-        //stores the coordinates of all the buttons
+        //stores the coordinates of all the buttons so that hitboxes and drawing can all be done from calling the array
         buttons = new int[][]{
             {0, 
                 getHeight()-(int)(90 / heightScalar), 
@@ -693,15 +739,25 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     }
     
     
+    /**
+     * Checks if the code was sent from the other player to restart
+     * @param potentialBoard - the board that may contain the code
+     * @return if the board was actually a code being sent to restart the game
+     */
     private boolean checkForRestart(int[][][][] potentialBoard){
+        //checks the places that should be bombs
         if(potentialBoard[0][0][0][1] != 1 || potentialBoard[1][0][0][1] != 1){
+            //if they both are not bombs, the code was not sent
             return false;
         }
 
+        //loops through all the tiles of the potential board containing the code
         for (int i = 0; i < potentialBoard.length; i++) {
             for (int j = 0; j < potentialBoard[i].length; j++) {
                 for (int k = 0; k < potentialBoard[i][j].length; k++) {
+                    //doesn't check the ones that should be bombs
                     if(!(k == 0 && j == 0)){
+                        //exits false if any values are filled because the only tiles that should be placed are the two for the code
                         if(!(potentialBoard[i][k][j][0] == 0
                             && potentialBoard[i][k][j][1] == 0
                             && potentialBoard[i][k][j][2] == 0
@@ -714,12 +770,15 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
             }
         }
         
+        //is the code if previous tests are passed
         return true;
     }
     
-    
+    /**
+     * Resets the variables so that the game can be played again from the start
+     */
     private void restartGame(){
-        System.out.println("Restarting Game");
+        //everything returns to what it was set to at the start of the game
         turn = id - 1;
         turnCounter = 0;
         showBombs = false;
@@ -738,7 +797,6 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     
     /**
      * Play audio to the user from a file
-     * @param TURN_BEEP 
      */
     private void playTurnBeep() {
         
@@ -778,13 +836,5 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     @Override
     public void actionPerformed(ActionEvent e) {
         repaint();
-    }
-
-    public void mouseMoved(MouseEvent e) {
-//        System.out.println(e.getX() + ":" + e.getY());
-    }
-
-    public void mouseDragged(MouseEvent e) {
-//        System.out.println(e.getX() + ":" + e.getY());
     }
 }
