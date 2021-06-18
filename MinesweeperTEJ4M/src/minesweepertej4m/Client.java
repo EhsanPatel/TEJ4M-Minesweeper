@@ -529,7 +529,8 @@ public class Client extends JFrame {
                 int count = 0;
                 while (count < file.length) {
                     int bytesRead = dataIn.read(file, count, file.length - count);
-                    System.out.println("[Client " + clientID + "] " + "bytesRead: " + bytesRead);
+                    //debug the incomming data
+                    //System.out.println("[Client " + clientID + "] " + "bytesRead: " + bytesRead);
                     if (bytesRead == -1) {
                         System.out.println("[Client " + clientID + "] " + "didn't get a complete file");
                     }
