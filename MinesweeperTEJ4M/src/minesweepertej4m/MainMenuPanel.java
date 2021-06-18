@@ -89,8 +89,8 @@ public class MainMenuPanel extends JPanel implements ActionListener, MouseMotion
             int btnX = super.getWidth() / 2 - ((int) (MAIN_MENU_REG[0].getWidth(null) / widthScalar) / 2);
             int btnY;
 
-            //loop through the 2 buttons
-            for (int i = 0; i < 2; i++) {
+            //loop through the 3 buttons
+            for (int i = 0; i < 3; i++) {
 
                 btnY = super.getHeight() / 2 + ((int) (MAIN_MENU_REG[i].getHeight(null) / heightScalar) * i) + ((int) (10 / heightScalar) * i);
 
@@ -135,6 +135,9 @@ public class MainMenuPanel extends JPanel implements ActionListener, MouseMotion
                             SweeperJoin joinFrame = new SweeperJoin(mainMenuFrameRef);
                             joinFrame.setLocationRelativeTo(null);
                             joinFrame.setVisible(true);
+                        } else if (i == 2) { //show the instructions window
+                            //probably hide this
+                            mainMenuFrameRef.setVisible(false);
                         }
                     }
 
@@ -166,7 +169,7 @@ public class MainMenuPanel extends JPanel implements ActionListener, MouseMotion
         java.awt.Image[] buttonImg;
 
         //loop through the 3 buttons to draw them
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
 
             if (drawButtonBorder == i) {
                 buttonImg = MAIN_MENU_CLICK;
