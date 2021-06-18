@@ -15,7 +15,7 @@ public class SweeperJoin extends javax.swing.JFrame {
     Server sweeperServer;
     Client client;
     
-    GameScreenFrame theGame;
+    gameScreenFrame theGame;
 
     /**
      * Creates new form SweeperCreate
@@ -165,9 +165,9 @@ public class SweeperJoin extends javax.swing.JFrame {
             client.setUpGUI();
             
             //hand the client off to the Game Screen
-            theGame = new GameScreenFrame(client);
+            theGame = new gameScreenFrame(client);
             
-            //set the GameScreenFrame attribute in the Client
+            //set the gameScreenFrame attribute in the Client
             client.setGameScreenFrame(theGame);
             
             client.setUpButton();
