@@ -20,9 +20,20 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import resources.ResourcesRef;
 
 import static resources.ResourcesRef.*;
 
@@ -182,6 +193,9 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         
         //flips the turn
         turn = (turn+1)%2;
+        
+        //play the turn chime shound
+        playAudio(ResourcesRef.TURN_BEEP);
         
         repaint();
         
@@ -651,6 +665,37 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         drawDynamicComponents(g); //draw the changing components
         //synchronizes the graphics
         Toolkit.getDefaultToolkit().sync();
+    }
+    
+    /**
+     * Play audio to the user from a file
+     * @param TURN_BEEP 
+     */
+    private void playAudio(File soundFile) {
+        //create a stream for the audio
+        AudioInputStream stream;
+        
+        //try to load and play it
+        try {
+            
+            //load it in
+            stream = AudioSystem.getAudioInputStream(soundFile);
+            
+            //clip it
+            Clip clip = AudioSystem.getClip();
+            clip.open(stream);
+            
+            //play it
+            clip.start();
+            
+        } catch (FileNotFoundException ex) {
+            System.out.println("[ERROR] Sound File not found\n" + ex);
+        } catch (UnsupportedAudioFileException ex) {
+            System.out.println("[ERROR] Sound File is of wrong type\n" + ex);
+        } catch (IOException | LineUnavailableException ex) {
+            System.out.println("[ERROR] Sound File error\n" + ex);
+        } 
+        
     }
     
     /**
