@@ -459,16 +459,30 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     private void checkForWins(){
         //loops through all the tiles on the board
         for (int i = 0; i < boards.length; i++) {
+            
+            boolean allCleared = true;
+            
             for (int j = 0; j < boards[i].length; j++) {
                 for (int k = 0; k < boards[i][j].length; k++) {
+                    //loss is when an uncovered tile and bomb exist together
                     if(boards[i][k][j][1] == 1 && boards[i][k][j][0] == 1){
                         showBombs = true;
                         gameOver = true;
                         winner = i;
                     }
+                    if(boards[i][k][j][1] == 0 && boards[i][k][j][0] == 0){
+                        allCleared = false;
+                    }
                 }
             }
+            //win is when all bombs
+            if(allCleared){
+                showBombs = true;
+                gameOver = true;
+                winner = (i+1)%2;
+            }
         }
+        
     }
     
     /**
