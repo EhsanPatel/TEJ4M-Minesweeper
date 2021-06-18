@@ -67,6 +67,9 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     double widthScalar;
     double heightScalar;
     
+    private boolean waitsForBothPlayers = true; //If this is the first client does it wait for the server to send the start up command before it accepts grid hits
+    private boolean hasRecievedStartup; //whether or not this client has gotten the startup command from the server
+    
     /**
      * Constructor for this panel to be drawn
      * @param m
@@ -81,6 +84,9 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         
         //recieves mouse motion input
         addMouseMotionListener(this);
+        
+        //the client has not yet recieved the start up command
+        hasRecievedStartup = false;
         
         //receive whos turn it is from the server here
         id = sweeperClient.getClientID(); //still need to do something with this data
@@ -99,54 +105,59 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                 checkButtonHits(e.getX(),e.getY());
                 
                 //checks if it is the current players turn to make a move
-                if(turn == 0 && !gameOver){
+                if(turn == 0 && !gameOver) {
+                    
+                    //checks if the game needs to check for startup command and if it has recived it
+                    //but only if this is the first player. The second will always be able to go
+                    if ((id == 1 && (waitsForBothPlayers && hasRecievedStartup) || (!waitsForBothPlayers)) || id == 2)   {
 
-                    //checks if the mouse was clicked on the first grid space
-                    if(firstGridHit(e.getX(),e.getY()) && ((id == 2 && currentAction.equals("bomb") && !player2FirstTurn)||(id == 1 && !currentAction.equals("bomb")))){
-                        //get the mapped coordinates
-                        int boardX = (e.getX() - ((getWidth()/2)-(int)(550 / widthScalar)))/(int)(50 / widthScalar);
-                        int boardY = (e.getY() - ((getHeight()/2)-(int)(250 / heightScalar)))/(int)(50 / heightScalar);
-                        //update the board
-                        boards = getLocalMove(boardX,boardY, 0);
-                        checkForWins();
-                        
-                        //checks if the move is valid
-                        if(isValid){
-                            if(player1FirstTurn){
-                                generateBoard(0,boardX,boardY);
-                                player1FirstTurn = false;
-                            }
-                            if(boards[1][boardX][boardY][3] == 0){
-                                revealTiles(boardX, boardY, 0);
-                            }
-                            
-                            //send the updated board to the game server
-                            sweeperClient.sendBoardToServer(boards);
-                            isValid = false;
-                        }
+                        //checks if the mouse was clicked on the first grid space
+                        if(firstGridHit(e.getX(),e.getY()) && ((id == 2 && currentAction.equals("bomb") && !player2FirstTurn)||(id == 1 && !currentAction.equals("bomb")))){
+                            //get the mapped coordinates
+                            int boardX = (e.getX() - ((getWidth()/2)-(int)(550 / widthScalar)))/(int)(50 / widthScalar);
+                            int boardY = (e.getY() - ((getHeight()/2)-(int)(250 / heightScalar)))/(int)(50 / heightScalar);
+                            //update the board
+                            boards = getLocalMove(boardX,boardY, 0);
+                            checkForWins();
 
-                    //checks if the mouse was clicked on the second grid space
-                    }else if(secondGridHit(e.getX(),e.getY()) && ((id == 1 && currentAction.equals("bomb") && !player1FirstTurn)||(id == 2 && !currentAction.equals("bomb")))){
-                        //get the mapped coordinates
-                        int boardX = (e.getX() - ((getWidth()/2) +(int)(50 / widthScalar))) /(int)(50 / widthScalar);
-                        int boardY = (e.getY() - ((getHeight()/2)-(int)(250 / heightScalar)))/(int)(50 / heightScalar);
-                        //update the board
-                        boards = getLocalMove(boardX,boardY, 1);
-                        checkForWins();
-                        
-                        //checks if the move is valid
-                        if(isValid){
-                            if(player2FirstTurn){
-                                generateBoard(1,boardX,boardY);
-                                player2FirstTurn = false;
+                            //checks if the move is valid
+                            if(isValid){
+                                if(player1FirstTurn){
+                                    generateBoard(0,boardX,boardY);
+                                    player1FirstTurn = false;
+                                }
+                                if(boards[1][boardX][boardY][3] == 0){
+                                    revealTiles(boardX, boardY, 0);
+                                }
+
+                                //send the updated board to the game server
+                                sweeperClient.sendBoardToServer(boards);
+                                isValid = false;
                             }
-                            if(boards[1][boardX][boardY][3] == 0){
-                                revealTiles(boardX, boardY, 1);
+
+                        //checks if the mouse was clicked on the second grid space
+                        }else if(secondGridHit(e.getX(),e.getY()) && ((id == 1 && currentAction.equals("bomb") && !player1FirstTurn)||(id == 2 && !currentAction.equals("bomb")))){
+                            //get the mapped coordinates
+                            int boardX = (e.getX() - ((getWidth()/2) +(int)(50 / widthScalar))) /(int)(50 / widthScalar);
+                            int boardY = (e.getY() - ((getHeight()/2)-(int)(250 / heightScalar)))/(int)(50 / heightScalar);
+                            //update the board
+                            boards = getLocalMove(boardX,boardY, 1);
+                            checkForWins();
+
+                            //checks if the move is valid
+                            if(isValid){
+                                if(player2FirstTurn){
+                                    generateBoard(1,boardX,boardY);
+                                    player2FirstTurn = false;
+                                }
+                                if(boards[1][boardX][boardY][3] == 0){
+                                    revealTiles(boardX, boardY, 1);
+                                }
+
+                                //send the updated board to the game server
+                                sweeperClient.sendBoardToServer(boards);
+                                isValid = false;
                             }
-                            
-                            //send the updated board to the game server
-                            sweeperClient.sendBoardToServer(boards);
-                            isValid = false;
                         }
                     }
                 }
@@ -174,6 +185,13 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         
         repaint();
         
+    }
+    
+    /**
+     * Method to call in Client.java to acknowledge the reception of the start up command
+     */
+    public void networkStartupCommand() {
+        hasRecievedStartup = true;
     }
     
     

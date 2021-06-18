@@ -317,6 +317,9 @@ public class Client extends JFrame {
         //set the button to the value
         buttonEnabled = recivedBoolean;
         updateButtons();
+        
+        //send the startup command to the GameScreen
+        gameScreenFrame.getGameScreenPanel().networkStartupCommand();
 
         //start listening
         //never stop listening
