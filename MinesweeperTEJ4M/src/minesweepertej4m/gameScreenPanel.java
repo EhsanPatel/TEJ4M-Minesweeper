@@ -20,6 +20,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -33,6 +34,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.InputStream;
 import resources.ResourcesRef;
 
 import static resources.ResourcesRef.*;
@@ -195,7 +197,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         turn = (turn+1)%2;
         
         //play the turn chime shound
-        playAudio(ResourcesRef.TURN_BEEP);
+        playTurnBeep();
         
         repaint();
         
@@ -671,21 +673,25 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
      * Play audio to the user from a file
      * @param TURN_BEEP 
      */
-    private void playAudio(File soundFile) {
-        //create a stream for the audio
-        AudioInputStream stream;
+    private void playTurnBeep() {
         
         //try to load and play it
         try {
-            
+            InputStream TURN_BEEP = (ResourcesRef.class.getResourceAsStream("audio/turnBeep.wav"));
+
+            InputStream bufferedStream; //add a buffer to the stream
+            AudioInputStream stream; //the stream best used for playing audio
+
+            //decorate it with a buffer
+            bufferedStream = new BufferedInputStream(TURN_BEEP);
+
             //load it in
-            stream = AudioSystem.getAudioInputStream(soundFile);
-            
+            stream = AudioSystem.getAudioInputStream(bufferedStream);
+
             //clip it
             Clip clip = AudioSystem.getClip();
             clip.open(stream);
-            
-            //play it
+
             clip.start();
             
         } catch (FileNotFoundException ex) {

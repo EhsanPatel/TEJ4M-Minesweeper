@@ -41,8 +41,5 @@ public class ResourcesRef {
     
     public final static Image GAME_FLAG = new ImageIcon(ResourcesRef.class.getResource("images/gamePanel/flag2.png")).getImage();
     public final static Image GAME_BOMB = new ImageIcon(ResourcesRef.class.getResource("images/gamePanel/bomb.png")).getImage();
-    
-    //audio for the turn beep
-    public final static File TURN_BEEP = (new File(ResourcesRef.class.getResource("audio/turnBeep.wav").getPath()));
 
 }
