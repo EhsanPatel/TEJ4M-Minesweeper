@@ -8,6 +8,7 @@ package minesweepertej4m;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -34,15 +35,19 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     
     //panel variables
     private static int[][] buttons;
-    private static boolean player1FirstTurn = true;
-    private static boolean player2FirstTurn = true;
-    private boolean isValid = false;
+    
     private Timer timer;
 
     //game variables
     private int turn = 0;
     private int turnCounter = 0;
     private boolean showBombs = true; //toggle to change bomb visibility
+    private static boolean player1FirstTurn = true;
+    private static boolean player2FirstTurn = true;
+    private boolean isValid = false;
+    private boolean gameOver = false;
+    private int winner = 0;
+    
     //board format [whos board][x][y][covered, is bomb, # surrounding, is flagged]
     private int[][][][] boards = new int[2][10][10][4];
     private String currentAction = "scout";
@@ -94,7 +99,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                 checkButtonHits(e.getX(),e.getY());
                 
                 //checks if it is the current players turn to make a move
-                if(turn == 0){
+                if(turn == 0 && !gameOver){
 
                     //checks if the mouse was clicked on the first grid space
                     if(firstGridHit(e.getX(),e.getY()) && ((id == 2 && currentAction.equals("bomb") && !player2FirstTurn)||(id == 1 && !currentAction.equals("bomb")))){
@@ -103,6 +108,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                         int boardY = (e.getY() - ((getHeight()/2)-(int)(250 / heightScalar)))/(int)(50 / heightScalar);
                         //update the board
                         boards = getLocalMove(boardX,boardY, 0);
+                        checkForWins();
                         
                         //checks if the move is valid
                         if(isValid){
@@ -126,6 +132,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                         int boardY = (e.getY() - ((getHeight()/2)-(int)(250 / heightScalar)))/(int)(50 / heightScalar);
                         //update the board
                         boards = getLocalMove(boardX,boardY, 1);
+                        checkForWins();
                         
                         //checks if the move is valid
                         if(isValid){
@@ -160,6 +167,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     public void networkUpdateBoards(int[][][][] ungodlyArray) {
         
         boards = ungodlyArray;
+        checkForWins();
         
         //flips the turn
         turn = (turn+1)%2;
@@ -179,7 +187,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         
         
         //outlines the grid of who's turn it is
-        g2d.setColor(new Color(255,0,0));
+        g2d.setColor(new Color(0,0,0));
         
         //which grid to outline is dependant on the id and the turn
         if(id == 1){
@@ -276,6 +284,18 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
         g2d.drawString("Opponent:", 
                 (getWidth() / 2) - (int)(560 / widthScalar) + ((id)%2) * (int)(600 / widthScalar), 
                 (getHeight() / 2) - (int)(280 / heightScalar));
+        
+        
+        //displays if there is a winner
+        if(gameOver){
+            String winnerText = (id-1==winner) ? "You Lost!":"You Won!";
+            // Get the FontMetrics for font width
+            FontMetrics metrics = g.getFontMetrics(g2d.getFont());
+            //draws the text to display the winner
+            g2d.drawString(winnerText, 
+                    (getWidth() - metrics.stringWidth(winnerText)) / 2, 
+                    (int)(80 / heightScalar));
+        }
 
     }
     
@@ -302,10 +322,6 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                 isValid = true;
                 //switches turn: may need to move into specific actions to be flag at any time
                 turn = (turn + 1) % 2;
-            }
-            if(boards[boardNum][boardX][boardY][1] == 1){
-                showBombs = true;
-                System.out.println("Game over, you clicked on a bomb");
             }
             
         }else if(currentAction.equals("flag")){
@@ -440,6 +456,21 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
     }
 
     
+    private void checkForWins(){
+        //loops through all the tiles on the board
+        for (int i = 0; i < boards.length; i++) {
+            for (int j = 0; j < boards[i].length; j++) {
+                for (int k = 0; k < boards[i][j].length; k++) {
+                    if(boards[i][k][j][1] == 1 && boards[i][k][j][0] == 1){
+                        showBombs = true;
+                        gameOver = true;
+                        winner = i;
+                    }
+                }
+            }
+        }
+    }
+    
     /**
      * displays the board on the screen with all the changing components
      * @param g2d - the drawing object to use to create the shapes and images
@@ -491,7 +522,7 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                     }
                     
                     //displays a number if the square has been uncovered
-                    if(boards[i][k][j][0] == 1 && boards[i][k][j][2] != 0){
+                    if(boards[i][k][j][0] == 1 && boards[i][k][j][2] != 0 && boards[i][k][j][1] != 1){
                         g2d.setColor(colors[boards[i][k][j][2]-1]);
                         g2d.setFont(new Font("TimesRoman", Font.PLAIN, (int)(30 / heightScalar)));
                         g2d.drawString(""+boards[i][k][j][2],
@@ -530,15 +561,12 @@ public class gameScreenPanel extends JPanel implements ActionListener, MouseMoti
                 System.out.println("Settings");
                 break;
             case 1:
-                System.out.println("Scout Bomb");
                 currentAction = "scout";
                 break;
             case 2:
-                System.out.println("Flag Bomb");
                 currentAction = "flag";
                 break;
             case 3:
-                System.out.println("Place Bomb");
                 currentAction = "bomb";
                 break;
             case 4:
