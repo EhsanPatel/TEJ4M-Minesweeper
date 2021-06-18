@@ -6,6 +6,7 @@
 package resources;
 
 import java.awt.Image;
+import java.io.File;
 import javax.swing.ImageIcon;
 
 /**
