@@ -1,7 +1,7 @@
 /*
  * Lukas Krampitz
  * Mar 27, 2021
- * 
+ * A SocketServer that interfaces with 2 clients to send and recieve data about the MineSeeperBoard
  */
 package minesweepertej4m;
 

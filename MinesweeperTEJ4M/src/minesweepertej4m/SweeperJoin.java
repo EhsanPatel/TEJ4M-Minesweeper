@@ -1,7 +1,7 @@
 /*
  * Lukas Krampitz
  * Jun 15, 2021
- * 
+ * A basic GUI used to connect to an existing Multiplayer Minesweeper server
  */
 package minesweepertej4m;
 
