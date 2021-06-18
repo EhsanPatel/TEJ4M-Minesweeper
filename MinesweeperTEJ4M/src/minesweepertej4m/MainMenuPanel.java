@@ -24,6 +24,9 @@ public class MainMenuPanel extends JPanel implements ActionListener, MouseMotion
     private MainMenuFrame mainMenuFrameRef;
     private int drawButtonSelection; //the button that should be drawn with a selection overlay
     private int drawButtonBorder; //the button that should be drawn with a border after a click
+    
+    //to prevent multiple of these from being created make it global
+    private GameInstructions instructions;
 
     double widthScalar;
     double heightScalar;
@@ -142,6 +145,11 @@ public class MainMenuPanel extends JPanel implements ActionListener, MouseMotion
                                 //show the instructions window
                                 //probably hide this
                                 mainMenuFrameRef.setVisible(false);
+                                
+                                //create a new instruction window to show
+                                instructions = new GameInstructions(mainMenuFrameRef);
+                                instructions.setLocationRelativeTo(null);
+                                instructions.setVisible(true);
                                 break;
                             default:
                                 break;
