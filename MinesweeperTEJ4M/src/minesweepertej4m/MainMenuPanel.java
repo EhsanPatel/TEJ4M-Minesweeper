@@ -119,25 +119,32 @@ public class MainMenuPanel extends JPanel implements ActionListener, MouseMotion
                         drawButtonBorder = -1;
 
                         //preform the action that that button is reposible for
-                        if (i == 0) { //create server
-                            //hide this main menu
-                            mainMenuFrameRef.setVisible(false);
-
-                            //create a new game server creation Frame and show it
-                            SweeperCreate creationFrame = new SweeperCreate(mainMenuFrameRef);
-                            creationFrame.setLocationRelativeTo(null);
-                            creationFrame.setVisible(true);
-                        } else if (i == 1) { //join game
-                            //hide this main menu
-                            mainMenuFrameRef.setVisible(false);
-
-                            //create a new game server creation Frame and show it
-                            SweeperJoin joinFrame = new SweeperJoin(mainMenuFrameRef);
-                            joinFrame.setLocationRelativeTo(null);
-                            joinFrame.setVisible(true);
-                        } else if (i == 2) { //show the instructions window
-                            //probably hide this
-                            mainMenuFrameRef.setVisible(false);
+                        switch (i) {
+                            case 0:
+                                //create server
+                                //hide this main menu
+                                mainMenuFrameRef.setVisible(false);
+                                //create a new game server creation Frame and show it
+                                SweeperCreate creationFrame = new SweeperCreate(mainMenuFrameRef);
+                                creationFrame.setLocationRelativeTo(null);
+                                creationFrame.setVisible(true);
+                                break;
+                            case 1:
+                                //join game
+                                //hide this main menu
+                                mainMenuFrameRef.setVisible(false);
+                                //create a new game server creation Frame and show it
+                                SweeperJoin joinFrame = new SweeperJoin(mainMenuFrameRef);
+                                joinFrame.setLocationRelativeTo(null);
+                                joinFrame.setVisible(true);
+                                break;
+                            case 2:
+                                //show the instructions window
+                                //probably hide this
+                                mainMenuFrameRef.setVisible(false);
+                                break;
+                            default:
+                                break;
                         }
                     }
 
