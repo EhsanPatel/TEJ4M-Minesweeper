@@ -10,7 +10,7 @@ package minesweepertej4m;
  * @author Tacitor
  */
 public class GameInstructions extends javax.swing.JFrame {
-    
+
     MainMenuFrame mainFrameRef;
 
     /**
@@ -20,6 +20,7 @@ public class GameInstructions extends javax.swing.JFrame {
         mainFrameRef = m;
         MainMenuFrame.setIcon(this);
         initComponents();
+        textSetup();
     }
 
     /**
@@ -33,9 +34,9 @@ public class GameInstructions extends javax.swing.JFrame {
 
         mainPanel = new javax.swing.JPanel();
         titleLbl = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        mainTxtArea = new javax.swing.JTextArea();
         backBtn = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jEditorPane1 = new javax.swing.JEditorPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Multiplayer MineSweeper");
@@ -49,18 +50,6 @@ public class GameInstructions extends javax.swing.JFrame {
         titleLbl.setForeground(new java.awt.Color(255, 255, 225));
         titleLbl.setText("Multiplayer MineSweeper Instructions and Information");
 
-        mainTxtArea.setBackground(new java.awt.Color(88, 165, 100));
-        mainTxtArea.setColumns(20);
-        mainTxtArea.setFont(new java.awt.Font("Monospaced", 0, 18)); // NOI18N
-        mainTxtArea.setLineWrap(true);
-        mainTxtArea.setRows(5);
-        mainTxtArea.setText("Hello Test");
-        mainTxtArea.setWrapStyleWord(true);
-        mainTxtArea.setAutoscrolls(false);
-        mainTxtArea.setDisabledTextColor(new java.awt.Color(50, 50, 50));
-        mainTxtArea.setEnabled(false);
-        jScrollPane1.setViewportView(mainTxtArea);
-
         backBtn.setText("< Back");
         backBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -68,17 +57,25 @@ public class GameInstructions extends javax.swing.JFrame {
             }
         });
 
+        jEditorPane1.setBackground(new java.awt.Color(88, 165, 100));
+        jEditorPane1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jEditorPane1.setDisabledTextColor(new java.awt.Color(50, 50, 50));
+        jEditorPane1.setEnabled(false);
+        jScrollPane1.setViewportView(jEditorPane1);
+
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(titleLbl)
+                .addGap(89, 89, 89))
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(backBtn)
-                    .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1243, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(titleLbl)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1331, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(backBtn))
                 .addContainerGap(30, Short.MAX_VALUE))
         );
         mainPanelLayout.setVerticalGroup(
@@ -86,11 +83,11 @@ public class GameInstructions extends javax.swing.JFrame {
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(titleLbl)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 644, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 650, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(backBtn)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -113,14 +110,36 @@ public class GameInstructions extends javax.swing.JFrame {
         this.setVisible(false);
         //show the main menu again
         mainFrameRef.setVisible(true);
-        
+
     }//GEN-LAST:event_backBtnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backBtn;
+    private javax.swing.JEditorPane jEditorPane1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel mainPanel;
-    private javax.swing.JTextArea mainTxtArea;
     private javax.swing.JLabel titleLbl;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * Add the text to the Text Area
+     */
+    private void textSetup() {
+        jEditorPane1.setContentType("text/html");
+        jEditorPane1.setText("<h1>Networking and Connectivity:</h1>"
+                + "<p>&nbsp&nbsp&nbsp&nbsp Multiplayer minesweeper is a fully multiplayer game and requires <b>TWO</b> instances of the program to function correctly. Both of the instances are not required to run on the same computer. \n</p>"
+                + "<p>&nbsp&nbsp&nbsp&nbsp To connect two games together so that two people can play one player must be the host. To do so they must select “Create Game” from the main menu. Here they select a port number for the game (server) to run on. By default the value is ‘25570’, a port with no official conflicts. This port is not required and a user can use any other port they desire. <b>This user is required to portforward their port number of choosing.<b> Then this first user can click the “Create Game” button on this new sub-menu.\n</p>"
+                + "<p>&nbsp&nbsp&nbsp&nbsp Then the second user must select “Join Game” from the main menu. They are then presented with a similar interface presenting them with a port option but also an IP option. Another one of the important parts is that this port number <b>must match the first player’s (host’s) port number</b>. Now the second player must enter the IP address of the game server. This is also the same IP address of the first user. They can locate their IP address at websites like <a href=\"https://www.whatsmyip.org/\">https://www.whatsmyip.org/</a> or <a href=\"https://whatismyipaddress.com/\">https://whatismyipaddress.com/</a> or even just by performing a google search of “what's my ip”. Both IPv4 and IPv6 are supported though IPv4 is likely to work when IPv6 does not because not all consumer routers port forward correctly. Then this second user can click the “Join Game” button on this menu and play. This first turn will always go to player 1 (a.k.a. the first player or the player hosting the server or the player that clicked “Create Game”).</p>"
+                + "<h2>Why isn’t it working?</h2>"
+                + "<ol><li>There is a port mismatch. Ensure this is the same number.</li> "
+                + "<li>The second player is using the wrong IP. There are private and public IPs, it is possible the first player gave the wrong address. It is also possible there was an error in entering the IP address.</li>"
+                + "<li>The <b>most common</b> issue is most likely that the first player did not configure the port forward correctly.</li>"
+                + "</ol>"
+                + "<h2>Playing alone?</h2>"
+                + "<p>Are you playing alone? No problem. You can just run the game twice and use the default port and IP values. This will connect directly through your own computer.</p>"
+                + "<h2>Need help?</h2>"
+                + "<p>&nbsp&nbsp&nbsp&nbsp Send me an email at: “lukasjkrampiz@gmail.com” or “rbf2.server@gmail.com”</p>"
+        );
+
+    }
 }
