@@ -226,9 +226,10 @@ public class GameInstructions extends javax.swing.JFrame {
                 + " You must start by uncovering a tile on your board, and this will always be a safe spot because the bombs generate after.</p>"
                 
                 + "<h2>Actions</h2>"
-                + "<ol><li><b>Scout</b>: Uncover a tile and reveal the number or mine underneath.</li> "
-                + "<li><b>Flag</b>: Mark areas that you believe are bombs so that you can remember where to go. This will lock the tile until unflagged.</li>"
-                + "<li><b>Bomb</b>: Place a bomb on your opponents grid to make their search more difficult.</li>"
+                + "<ol><li><b>Scout</b>: Uncover a tile and reveal the number or mine underneath. This will end your turn so that the opponent can play.</li> "
+                + "<li><b>Flag</b>: Mark areas that you believe are bombs so that you can remember where to go."
+                + " This will lock the tile until unflagged, and you can place an unlimited number of flags on yout turn.</li>"
+                + "<li><b>Bomb</b>: Place a bomb on your opponents grid to make their search more difficult. This will end your turn so that the opponent can play.</li>"
                 + "</ol>"
                 
                 + "<h2>What Do The Numbers Mean?</h2>"
