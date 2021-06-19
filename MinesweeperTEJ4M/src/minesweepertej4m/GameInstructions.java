@@ -10,7 +10,7 @@ package minesweepertej4m;
  * @author Tacitor
  */
 public class GameInstructions extends javax.swing.JFrame {
-
+    int index = 0;
     MainMenuFrame mainFrameRef;
 
     /**
@@ -35,8 +35,10 @@ public class GameInstructions extends javax.swing.JFrame {
         mainPanel = new javax.swing.JPanel();
         titleLbl = new javax.swing.JLabel();
         backBtn = new javax.swing.JButton();
+        forwardBtn = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jEditorPane1 = new javax.swing.JEditorPane();
+        jTextPane1 = new javax.swing.JTextPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Multiplayer MineSweeper");
@@ -48,7 +50,9 @@ public class GameInstructions extends javax.swing.JFrame {
 
         titleLbl.setFont(new java.awt.Font("Yu Gothic", 0, 48)); // NOI18N
         titleLbl.setForeground(new java.awt.Color(255, 255, 225));
-        titleLbl.setText("Multiplayer MineSweeper Instructions and Information");
+        titleLbl.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        titleLbl.setText("Instructions and Information");
+        titleLbl.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         backBtn.setText("< Back");
         backBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -57,66 +61,122 @@ public class GameInstructions extends javax.swing.JFrame {
             }
         });
 
-        jEditorPane1.setBackground(new java.awt.Color(88, 165, 100));
-        jEditorPane1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jEditorPane1.setDisabledTextColor(new java.awt.Color(50, 50, 50));
-        jEditorPane1.setEnabled(false);
-        jScrollPane1.setViewportView(jEditorPane1);
+        forwardBtn.setText("Next >");
+        forwardBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                forwardBtnActionPerformed(evt);
+            }
+        });
+
+        jPanel1.setBackground(new java.awt.Color(240, 240, 240));
+        jPanel1.setBorder(javax.swing.BorderFactory.createMatteBorder(10, 10, 10, 10, new java.awt.Color(17, 33, 20)));
+        jPanel1.setForeground(new java.awt.Color(255, 255, 255));
+
+        jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
+        jScrollPane1.setBorder(null);
+        jScrollPane1.setForeground(new java.awt.Color(255, 255, 255));
+
+        jTextPane1.setEditable(false);
+        jTextPane1.setBackground(new java.awt.Color(255, 255, 255));
+        jTextPane1.setBorder(null);
+        jTextPane1.setForeground(new java.awt.Color(255, 255, 255));
+        jTextPane1.setOpaque(false);
+        jScrollPane1.setViewportView(jTextPane1);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1)
+                .addGap(18, 18, 18))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 564, Short.MAX_VALUE)
+                .addGap(18, 18, 18))
+        );
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(titleLbl)
-                .addGap(89, 89, 89))
+            .addComponent(titleLbl, javax.swing.GroupLayout.DEFAULT_SIZE, 1379, Short.MAX_VALUE)
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1331, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(backBtn))
-                .addContainerGap(30, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addComponent(backBtn)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(forwardBtn)))
+                .addGap(30, 30, 30))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(titleLbl)
+                .addComponent(titleLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 650, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(backBtn)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(73, 73, 73)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(backBtn)
+                    .addComponent(forwardBtn))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
-        // TODO add your handling code here:
-        //hide this window
-        this.setVisible(false);
-        //show the main menu again
-        mainFrameRef.setVisible(true);
+        if(index == 0){
+            //hide this window
+            this.setVisible(false);
+            //show the main menu again
+            mainFrameRef.setVisible(true);
+        }else{
+            --index;
+            forwardBtn.setEnabled(true);
+            textSetup();
+        }
 
     }//GEN-LAST:event_backBtnActionPerformed
 
+    private void forwardBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_forwardBtnActionPerformed
+        if(index < 1){
+            ++index;
+            textSetup();
+            forwardBtn.setEnabled(false);
+        }
+    }//GEN-LAST:event_forwardBtnActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backBtn;
-    private javax.swing.JEditorPane jEditorPane1;
+    private javax.swing.JButton forwardBtn;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextPane jTextPane1;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JLabel titleLbl;
     // End of variables declaration//GEN-END:variables
@@ -125,21 +185,62 @@ public class GameInstructions extends javax.swing.JFrame {
      * Add the text to the Text Area
      */
     private void textSetup() {
-        jEditorPane1.setContentType("text/html");
-        jEditorPane1.setText("<h1>Networking and Connectivity:</h1>"
-                + "<p>&nbsp&nbsp&nbsp&nbsp Multiplayer minesweeper is a fully multiplayer game and requires <b>TWO</b> instances of the program to function correctly. Both of the instances are not required to run on the same computer. \n</p>"
-                + "<p>&nbsp&nbsp&nbsp&nbsp To connect two games together so that two people can play one player must be the host. To do so they must select “Create Game” from the main menu. Here they select a port number for the game (server) to run on. By default the value is ‘25570’, a port with no official conflicts. This port is not required and a user can use any other port they desire. <b>This user is required to portforward their port number of choosing.<b> Then this first user can click the “Create Game” button on this new sub-menu.\n</p>"
-                + "<p>&nbsp&nbsp&nbsp&nbsp Then the second user must select “Join Game” from the main menu. They are then presented with a similar interface presenting them with a port option but also an IP option. Another one of the important parts is that this port number <b>must match the first player’s (host’s) port number</b>. Now the second player must enter the IP address of the game server. This is also the same IP address of the first user. They can locate their IP address at websites like <a href=\"https://www.whatsmyip.org/\">https://www.whatsmyip.org/</a> or <a href=\"https://whatismyipaddress.com/\">https://whatismyipaddress.com/</a> or even just by performing a google search of “what's my ip”. Both IPv4 and IPv6 are supported though IPv4 is likely to work when IPv6 does not because not all consumer routers port forward correctly. Then this second user can click the “Join Game” button on this menu and play. This first turn will always go to player 1 (a.k.a. the first player or the player hosting the server or the player that clicked “Create Game”).</p>"
+        String[] pageText = new String[2];
+        pageText[0] = "<h1>Networking and Connectivity:</h1>"
+                + "<p>&nbsp&nbsp&nbsp&nbsp Multiplayer minesweeper is a fully multiplayer game and requires <b>TWO</b> instances of the program to function correctly."
+                + " Both of the instances are not required to run on the same computer. \n</p>"
+                + "<p>&nbsp&nbsp&nbsp&nbsp To connect two games together so that two people can play one player must be the host."
+                + " To do so they must select “Create Game” from the main menu. Here they select a port number for the game (server) to run on."
+                + " By default the value is ‘25570’, a port with no official conflicts. This port is not required and a user can use any other port they desire. "
+                + "<b>This user is required to portforward their port number of choosing.<b> Then this first user can click the “Create Game” button on this new sub-menu.\n</p>"
+                + "<p>&nbsp&nbsp&nbsp&nbsp Then the second user must select “Join Game” from the main menu."
+                + " They are then presented with a similar interface presenting them with a port option but also an IP option."
+                + " Another one of the important parts is that this port number <b>must match the first player’s (host’s) port number</b>."
+                + " Now the second player must enter the IP address of the game server. This is also the same IP address of the first user."
+                + " They can locate their IP address at websites like <a href=\"https://www.whatsmyip.org/\">https://www.whatsmyip.org/</a>"
+                + " or <a href=\"https://whatismyipaddress.com/\">https://whatismyipaddress.com/</a> or even just by performing a google search of “what's my ip”."
+                + " Both IPv4 and IPv6 are supported though IPv4 is likely to work when IPv6 does not because not all consumer routers port forward correctly."
+                + " Then this second user can click the “Join Game” button on this menu and play."
+                + " This first turn will always go to player 1 (a.k.a. the first player or the player hosting the server or the player that clicked “Create Game”).</p>"
                 + "<h2>Why isn’t it working?</h2>"
                 + "<ol><li>There is a port mismatch. Ensure this is the same number.</li> "
-                + "<li>The second player is using the wrong IP. There are private and public IPs, it is possible the first player gave the wrong address. It is also possible there was an error in entering the IP address.</li>"
+                + "<li>The second player is using the wrong IP. There are private and public IPs, it is possible the first player gave the wrong address."
+                + " It is also possible there was an error in entering the IP address.</li>"
                 + "<li>The <b>most common</b> issue is most likely that the first player did not configure the port forward correctly.</li>"
                 + "</ol>"
                 + "<h2>Playing alone?</h2>"
                 + "<p>Are you playing alone? No problem. You can just run the game twice and use the default port and IP values. This will connect directly through your own computer.</p>"
                 + "<h2>Need help?</h2>"
-                + "<p>&nbsp&nbsp&nbsp&nbsp Send me an email at: “lukasjkrampiz@gmail.com” or “rbf2.server@gmail.com”</p>"
-        );
+                + "<p>&nbsp&nbsp&nbsp&nbsp Send me an email at: “lukasjkrampiz@gmail.com” or “rbf2.server@gmail.com”</p>";
+        pageText[1] = "<h1>General Gameplay:</h1>"
+                + "<p>&nbsp&nbsp&nbsp&nbsp This version of minesweeper has an unusual twist where there are now two boards for two players to play against."
+                + " The board is setup and functions nearly identically to the original game. \n</p>"
+                
+                + "<h2>Objective</h2>"
+                + "<p>&nbsp&nbsp&nbsp&nbsp Your goal is to uncover all the tiles without bombs before your opponent does."
+                + " Avoid bombs by flagging the tiles and use the numbers as reference to solve which tiles are safe."
+                + " Clicking on a bomb results in a loss instantaneously, so be careful before you uncover!</p>"
+                
+                + "<h2>Starting Move</h2>"
+                + "<p>&nbsp&nbsp&nbsp&nbsp The first move is always a scout to uncover a tile."
+                + " You must start by uncovering a tile on your board, and this will always be a safe spot because the bombs generate after.</p>"
+                
+                + "<h2>Actions</h2>"
+                + "<ol><li><b>Scout</b>: Uncover a tile and reveal the number or mine underneath.</li> "
+                + "<li><b>Flag</b>: Mark areas that you believe are bombs so that you can remember where to go. This will lock the tile until unflagged.</li>"
+                + "<li><b>Bomb</b>: Place a bomb on your opponents grid to make their search more difficult.</li>"
+                + "</ol>"
+                
+                + "<h2>What Do The Numbers Mean?</h2>"
+                + "<p>&nbsp&nbsp&nbsp&nbsp The numbers indicate how many bombs are surrounding that tile."
+                + " These can be used to determine the locations of bombs based on patterns and are the primary tool to determining the locations of unsafe tiles."
+                + " Bombs touching the tile include the 4 on each side and the 4 on the diagonal for a maximum of 8 bombs surrounding a tile.</p>"
+                
+                + "<h2>Learn To Play The Original Minesweeper</h2>"
+                + "<a href=\"https://www.instructables.com/How-to-play-minesweeper/ \">https://www.instructables.com/How-to-play-minesweeper/</a>";
+        https://www.instructables.com/How-to-play-minesweeper/
+        jTextPane1.setContentType("text/html");
+        jTextPane1.setText(pageText[index]);
 
     }
 }
