@@ -1,7 +1,7 @@
 /*
- * Lukas Krampitz
+ * Lukas Krampitz & Ehsan Patel
  * Jun 18, 2021
- * 
+ * Give the user some instructions on how to play the game.
  */
 package minesweepertej4m;
 
